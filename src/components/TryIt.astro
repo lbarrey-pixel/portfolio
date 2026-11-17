@@ -2,8 +2,11 @@
 // "Try it": the interactive demos. Each keeps its own client-app look inside a device frame;
 // the section around them uses the portfolio's design.
 import '../demos/bakery/demo.css';
+import '../demos/crm/demo.css';
 import '../demos/quoting/demo.css';
+import '../demos/warehouse/demo.css';
 import { getContent } from '../content';
+import { strings as crm } from '../demos/crm/strings';
 import { strings as quoting } from '../demos/quoting/strings';
 import type { DemoId } from '../demos/types';
 import type { Locale } from '../i18n/locales';
@@ -16,12 +19,15 @@ interface Props {
 const { locale } = Astro.props;
 const c = getContent(locale);
 
-// Demos that exist so far, and the device each one runs in.
-const DEVICE: Partial<Record<DemoId, { variant: 'phone' | 'browser'; label?: string }>> = {
-  quoting: { variant: 'browser', label: quoting[locale].frameLabel },
+// The device each demo runs in. "wide" demos put the instructions in a row above the device;
+// the warehouse also has a second surface (the manager's dashboard) next to its phone.
+const DEVICE: Record<DemoId, { variant: 'phone' | 'browser'; label?: string; wide?: boolean; aside?: boolean }> = {
+  quoting: { variant: 'browser', label: quoting[locale].frameLabel, wide: true },
   bakery: { variant: 'phone' },
+  crm: { variant: 'browser', label: crm[locale].frameLabel, wide: true },
+  warehouse: { variant: 'phone', wide: true, aside: true },
 };
-const demos = c.work.projects.filter((p) => p.id in DEVICE);
+const demos = c.work.projects;
 ---
 
 <section id="try" class="section try" data-try data-locale={locale}>
@@ -53,10 +59,10 @@ const demos = c.work.projects.filter((p) => p.id in DEVICE);
 
     {
       demos.map((p, i) => {
-        const device = DEVICE[p.id]!;
+        const device = DEVICE[p.id];
         return (
           <div
-            class:list={['demo', `demo--${device.variant}`]}
+            class:list={['demo', device.wide && 'demo--wide']}
             id={`demo-${p.id}`}
             role="tabpanel"
             aria-labelledby={`try-tab-${p.id}`}
@@ -75,10 +81,11 @@ const demos = c.work.projects.filter((p) => p.id in DEVICE);
                 {c.tryIt.reset}
               </button>
             </div>
-            <div class="demo__device">
+            <div class:list={['demo__device', device.aside && 'demo__device--split']}>
               <DeviceFrame variant={device.variant} label={device.label}>
                 <div class="demo__root" data-demo-root={p.id} />
               </DeviceFrame>
+              {device.aside && <div data-demo-aside={p.id} />}
             </div>
           </div>
         );
@@ -89,10 +96,12 @@ const demos = c.work.projects.filter((p) => p.id in DEVICE);
 
 <script>
   import { mount as bakery } from '../demos/bakery/mount';
+  import { mount as crm } from '../demos/crm/mount';
   import { mount as quoting } from '../demos/quoting/mount';
+  import { mount as warehouse } from '../demos/warehouse/mount';
   import { initTryIt } from '../scripts/tryit';
 
-  document.querySelectorAll<HTMLElement>('[data-try]').forEach((section) => initTryIt(section, { quoting, bakery }));
+  document.querySelectorAll<HTMLElement>('[data-try]').forEach((section) => initTryIt(section, { quoting, bakery, crm, warehouse }));
 </script>
 
 <style>
@@ -185,24 +194,24 @@ const demos = c.work.projects.filter((p) => p.id in DEVICE);
     min-width: 0;
   }
 
-  /* Browser demos need the width: instructions sit in a row above the window. */
-  .demo--browser .demo__side,
-  .demo--browser .demo__device {
+  /* Wide demos need the width: instructions sit in a row above the device. */
+  .demo--wide .demo__side,
+  .demo--wide .demo__device {
     grid-column: 1 / -1;
   }
 
-  .demo--browser .demo__side {
+  .demo--wide .demo__side {
     grid-template-columns: minmax(0, 16rem) minmax(0, 1fr) auto;
     column-gap: var(--space-6);
     align-items: start;
     justify-items: stretch;
   }
 
-  .demo--browser .demo__note {
+  .demo--wide .demo__note {
     grid-column: 2;
   }
 
-  .demo--browser .demo__reset {
+  .demo--wide .demo__reset {
     grid-column: 3;
     grid-row: 1;
   }
@@ -248,19 +257,27 @@ const demos = c.work.projects.filter((p) => p.id in DEVICE);
     height: 100%;
   }
 
+  /* Phone and dashboard side by side; stacked when there is no room. */
+  .demo__device--split {
+    display: grid;
+    grid-template-columns: minmax(0, 22.5rem) minmax(0, 1fr);
+    gap: var(--space-5);
+    align-items: start;
+  }
+
   @media (max-width: 63.99rem) {
     .demo__side,
     .demo__device,
-    .demo--browser .demo__side {
+    .demo--wide .demo__side {
       grid-column: 1 / -1;
     }
 
-    .demo--browser .demo__side {
+    .demo--wide .demo__side {
       grid-template-columns: minmax(0, 1fr);
     }
 
-    .demo--browser .demo__note,
-    .demo--browser .demo__reset {
+    .demo--wide .demo__note,
+    .demo--wide .demo__reset {
       grid-column: 1;
       grid-row: auto;
       justify-self: start;
@@ -270,6 +287,10 @@ const demos = c.work.projects.filter((p) => p.id in DEVICE);
   @media (max-width: 47.99rem) {
     .demo {
       padding-top: var(--space-6);
+    }
+
+    .demo__device--split {
+      grid-template-columns: minmax(0, 1fr);
     }
   }
 </style>

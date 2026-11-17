@@ -1,0 +1,328 @@
+/*
+ * Distribution-center demo.
+ * .demo-warehouse is the operator's phone app, in the client's own navy theme.
+ * .wh-manager is the manager's dashboard next to it, drawn with the portfolio's tokens.
+ */
+.demo-warehouse {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: #f4f6fa;
+  color: #14213d;
+  font: 13px/1.45 var(--font-body);
+}
+
+.demo-warehouse :focus-visible {
+  outline: 2px solid #2563eb;
+  outline-offset: 2px;
+}
+
+.demo-warehouse .wh-head {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 16px 12px;
+  background: #0a1f3a;
+  color: #fff;
+}
+
+.demo-warehouse .wh-head b {
+  font: 700 15px/1.1 var(--font-body);
+}
+
+.demo-warehouse .wh-head small {
+  display: block;
+  color: #9fb1cc;
+  font-size: 11px;
+}
+
+.demo-warehouse .wh-body {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  align-content: start;
+  gap: 10px;
+  overflow: auto;
+  padding: 14px;
+}
+
+.demo-warehouse .wh-card {
+  display: grid;
+  gap: 8px;
+  padding: 12px;
+  border: 1px solid #e1e6ef;
+  border-radius: 12px;
+  background: #fff;
+  font-size: 13px;
+}
+
+.demo-warehouse .wh-card--center {
+  text-align: center;
+}
+
+.demo-warehouse .wh-card h4 {
+  margin: 0;
+  font: 700 15px/1.2 var(--font-body);
+}
+
+.demo-warehouse .wh-mute {
+  color: #64748b;
+}
+
+.demo-warehouse .wh-btn {
+  width: 100%;
+  padding: 12px;
+  border: 0;
+  border-radius: 10px;
+  background: #0a1f3a;
+  color: #fff;
+  font: 600 14px var(--font-body);
+  cursor: pointer;
+}
+
+.demo-warehouse .wh-btn--ok {
+  background: #1f7a4d;
+}
+
+.demo-warehouse .wh-btn[disabled] {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.demo-warehouse .wh-it {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 9px;
+  border: 1px solid #e1e6ef;
+  border-radius: 10px;
+  background: #fff;
+  color: #14213d;
+  font: 13px var(--font-body);
+  text-align: left;
+  cursor: pointer;
+}
+
+.demo-warehouse .wh-ck {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border: 2px solid #b9c3d3;
+  border-radius: 50%;
+  color: #fff;
+  font-size: 13px;
+}
+
+.demo-warehouse .wh-it.on .wh-ck {
+  border-color: #1f7a4d;
+  background: #1f7a4d;
+}
+
+.demo-warehouse .wh-t {
+  flex: 1;
+  min-width: 0;
+}
+
+.demo-warehouse .wh-it small {
+  display: block;
+  color: #64748b;
+}
+
+.demo-warehouse .wh-q {
+  flex: none;
+  font: 600 12px var(--font-mono);
+}
+
+.demo-warehouse .wh-ai {
+  padding: 10px;
+  border: 1px solid #f1d8a0;
+  border-radius: 10px;
+  background: #fff8e6;
+  font-size: 12.5px;
+}
+
+.demo-warehouse .wh-ai b {
+  color: #8a5a00;
+}
+
+.demo-warehouse .wh-vol {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.demo-warehouse .wh-vol label {
+  display: grid;
+  gap: 3px;
+  color: #64748b;
+  font-size: 10px;
+}
+
+.demo-warehouse .wh-vol input {
+  width: 100%;
+  padding: 8px 6px;
+  border: 1.5px solid #cbd3e1;
+  border-radius: 8px;
+  background: #fff;
+  color: #14213d;
+  font: 16px var(--font-mono);
+}
+
+.demo-warehouse .wh-nav {
+  flex: none;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border-top: 1px solid #e1e6ef;
+  background: #fff;
+}
+
+.demo-warehouse .wh-nav span {
+  padding: 10px 4px;
+  color: #8492a6;
+  font-size: 11px;
+  text-align: center;
+}
+
+.demo-warehouse .wh-nav span.on {
+  color: #2563eb;
+  font-weight: 600;
+}
+
+.demo-warehouse .wh-spin {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  vertical-align: -2px;
+  animation: wh-spin 0.7s linear infinite;
+}
+
+@keyframes wh-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ---------- manager's dashboard ---------- */
+
+.wh-manager {
+  display: grid;
+  gap: var(--space-4);
+  padding: var(--space-5);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--card);
+}
+
+.wh-manager h4 {
+  margin: 0;
+  font: 500 var(--step-1) / 1.2 var(--font-body);
+  letter-spacing: -0.02em;
+}
+
+.wh-manager .wh-pipe {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.wh-manager .wh-pipe li {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+  color: var(--mute);
+  font-size: 0.6875rem;
+  line-height: 1.2;
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+
+.wh-manager .wh-pipe i {
+  display: block;
+  height: 8px;
+  border-radius: 4px;
+  background: var(--line);
+  transition: background-color 0.5s var(--ease-out);
+}
+
+.wh-manager .wh-pipe li.done i {
+  background: var(--acc);
+}
+
+.wh-manager .wh-pipe li.now i {
+  background: var(--acc-live);
+}
+
+.wh-manager .wh-pipe li.done,
+.wh-manager .wh-pipe li.now {
+  color: var(--ink);
+}
+
+.wh-manager .wh-pipe li.now {
+  font-weight: 600;
+}
+
+.wh-manager .wh-kpi {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-2);
+  margin: 0;
+}
+
+.wh-manager .wh-kpi div {
+  padding: var(--space-3);
+  border-radius: var(--radius-lg);
+  background: var(--bg);
+}
+
+.wh-manager .wh-kpi dt {
+  font: 500 var(--step-1) / 1.1 var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
+
+.wh-manager .wh-kpi dd {
+  margin: var(--space-1) 0 0;
+  color: var(--mute);
+  font-size: var(--step--1);
+}
+
+.wh-manager .wh-log {
+  display: grid;
+  gap: 6px;
+  max-height: 13.75rem;
+  margin: 0;
+  padding: 0;
+  overflow: auto;
+  list-style: none;
+  color: var(--mute);
+  font-size: var(--step--1);
+}
+
+.wh-manager .wh-log li b {
+  color: var(--ink);
+  font: 500 var(--step--1) var(--font-mono);
+}
+
+@media (max-width: 30rem) {
+  .wh-manager {
+    padding: var(--space-4);
+  }
+
+  .wh-manager .wh-pipe li {
+    font-size: 0.59375rem;
+  }
+
+  .wh-manager .wh-kpi dt {
+    font-size: var(--step-0);
+  }
+}
