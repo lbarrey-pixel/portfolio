@@ -17,16 +17,16 @@ const tagsFor = (id?: string) => c.work.projects.find((p) => p.id === id)?.tags.
   <div class="wrap">
     <header class="section__head">
       <p class="section__tag">{c.pains.eyebrow}</p>
-      <h2 class="section__title">{c.pains.title}</h2>
-      <p class="section__lead">{c.pains.lead}</p>
+      <h2 class="section__title" data-reveal-lines>{c.pains.title}</h2>
+      <p class="section__lead" data-reveal>{c.pains.lead}</p>
     </header>
 
     <ul class="pains__grid">
       {
-        c.pains.items.map((p) => {
+        c.pains.items.map((p, i) => {
           const tags = tagsFor(p.demo);
           return (
-            <li class="pain" data-pain data-tilt data-reveal>
+            <li class="pain" data-pain data-tilt data-reveal style={`--n:${i % 3}`}>
               <h3 class="pain__title">{p.title}</h3>
               <p class="pain__problem">{p.problem}</p>
               <p class="pain__answer">
@@ -87,6 +87,7 @@ const tagsFor = (id?: string) => c.work.projects.find((p) => p.id === id)?.tags.
     transition:
       border-color 0.5s var(--ease-out),
       transform 0.6s var(--ease-out);
+    will-change: transform;
   }
 
   /* The glow is there only while the card is pointed at. */

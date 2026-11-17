@@ -50,25 +50,6 @@ const lines = c.hero.headline.length;
   </div>
 </section>
 
-<script>
-  // Magnetic buttons: they lean toward a fine pointer, and settle back when it leaves.
-  const fine = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
-  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (fine && !reduced) {
-    document.querySelectorAll<HTMLElement>('[data-magnetic]').forEach((el) => {
-      el.addEventListener('pointermove', (e) => {
-        const r = el.getBoundingClientRect();
-        const x = (e.clientX - r.left - r.width / 2) * 0.22;
-        const y = (e.clientY - r.top - r.height / 2) * 0.35;
-        el.style.translate = `${x.toFixed(1)}px ${y.toFixed(1)}px`;
-      });
-      el.addEventListener('pointerleave', () => {
-        el.style.translate = '';
-      });
-    });
-  }
-</script>
-
 <style>
   .hero {
     padding-block: clamp(var(--space-6), 6vh, var(--space-8)) var(--space-7);

@@ -29,13 +29,13 @@ const mailHref = emailHref(SITE.email);
   <Marquee items={lines} label={c.contact.eyebrow} size="lg" repeat={2} />
 
   <div class="wrap contact__inner">
-    <div class="contact__copy" data-reveal>
+    <div class="contact__copy">
       <p class="section__tag">{c.contact.eyebrow}</p>
-      <h2 class="contact__title">{c.contact.title}</h2>
-      <p class="contact__text">{c.contact.text}</p>
+      <h2 class="contact__title" data-reveal-lines>{c.contact.title}</h2>
+      <p class="contact__text" data-reveal>{c.contact.text}</p>
     </div>
 
-    <div class="contact__actions" data-reveal>
+    <div class="contact__actions" data-reveal style="--n:1">
       <a class="btn btn--primary contact__wa" href={waHref} target="_blank" rel="noopener" data-cta="whatsapp" data-magnetic>
         {c.contact.whatsapp}
       </a>

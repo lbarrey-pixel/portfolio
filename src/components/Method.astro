@@ -16,8 +16,8 @@ const code = (i: number) => String(i + 1).padStart(2, '0');
   <div class="wrap">
     <header class="section__head">
       <p class="section__tag">{c.method.eyebrow}</p>
-      <h2 class="section__title">{c.method.title}</h2>
-      <p class="section__lead">{c.method.lead}</p>
+      <h2 class="section__title" data-reveal-lines>{c.method.title}</h2>
+      <p class="section__lead" data-reveal>{c.method.lead}</p>
     </header>
 
     <ol class="method__steps">
