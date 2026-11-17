@@ -127,8 +127,62 @@ a {
   --btn-fg: var(--bg);
 }
 
+/* Designed sections share one head: a mono tag, a headline, a quieter lead. */
+.section {
+  padding-block: var(--space-9);
+}
+
+.section__head {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: var(--space-5);
+  row-gap: var(--space-4);
+  margin-bottom: var(--space-7);
+}
+
+.section__tag {
+  grid-column: 1 / -1;
+  font: 400 var(--step--1) / 1.4 var(--font-mono);
+  color: var(--acc);
+}
+
+.section__title {
+  grid-column: 1 / span 8;
+  font: 500 var(--step-4) / 1.02 var(--font-body);
+  letter-spacing: -0.035em;
+  text-wrap: balance;
+}
+
+.section__lead {
+  grid-column: 1 / span 6;
+  max-width: 56ch;
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  color: var(--mute);
+}
+
+@media (max-width: 47.99rem) {
+  .section {
+    padding-block: var(--space-8);
+  }
+
+  .section__head {
+    margin-bottom: var(--space-6);
+  }
+
+  .section__title {
+    grid-column: 1 / -1;
+    font-size: var(--step-3);
+    line-height: 1.05;
+  }
+
+  .section__lead {
+    grid-column: 1 / -1;
+  }
+}
+
 /* Sections not yet designed (later tasks) stay readable. */
-main > section:not(#hero) {
+main > section:not([class]) {
   max-width: var(--max);
   margin-inline: auto;
   padding: var(--space-8) var(--gutter);

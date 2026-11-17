@@ -1,0 +1,112 @@
+---
+// Short About: a small portrait and one statement, built only from facts on the original site.
+import { Picture } from 'astro:assets';
+import portrait from '../assets/photo/leonardo-portrait.jpg';
+import { getContent } from '../content';
+import type { Locale } from '../i18n/locales';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const c = getContent(locale);
+---
+
+<section id="about" class="section about">
+  <div class="wrap about__inner">
+    <figure class="about__photo" data-reveal>
+      <Picture
+        src={portrait}
+        alt={c.about.photoAlt}
+        formats={['avif', 'webp']}
+        widths={[240, 384]}
+        sizes="(min-width: 48rem) 240px, 45vw"
+        loading="lazy"
+      />
+    </figure>
+    <div class="about__body" data-reveal>
+      <h2 class="section__tag">{c.about.eyebrow}</h2>
+      <p class="about__text">{c.about.text}</p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .about {
+    border-top: 1px solid var(--line);
+  }
+
+  .about__inner {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: var(--space-5);
+    row-gap: var(--space-5);
+    align-items: end;
+  }
+
+  /* Photo treatment: quieter colour (the sky stops shouting) and a faint forest cast. */
+  .about__photo {
+    grid-column: 1 / span 3;
+    position: relative;
+    max-width: 15rem;
+    overflow: hidden;
+    border-radius: var(--radius-lg);
+    background: var(--card);
+  }
+
+  .about__photo :global(img) {
+    width: 100%;
+    height: auto;
+    filter: saturate(0.6) sepia(0.16) contrast(1.03);
+  }
+
+  .about__photo::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--acc);
+    mix-blend-mode: color;
+    opacity: 0.18;
+    pointer-events: none;
+  }
+
+  .about__body {
+    grid-column: 5 / span 7;
+    display: grid;
+    gap: var(--space-4);
+  }
+
+  .about__text {
+    max-width: 30ch;
+    font: 500 var(--step-3) / 1.14 var(--font-body);
+    letter-spacing: -0.03em;
+    text-wrap: pretty;
+  }
+
+  @media (max-width: 63.99rem) {
+    .about__photo {
+      grid-column: 1 / span 4;
+    }
+
+    .about__body {
+      grid-column: 5 / -1;
+    }
+
+    .about__text {
+      font-size: var(--step-2);
+      line-height: 1.2;
+    }
+  }
+
+  @media (max-width: 39.99rem) {
+    .about__photo {
+      grid-column: 1 / -1;
+      max-width: 11rem;
+    }
+
+    .about__body {
+      grid-column: 1 / -1;
+    }
+  }
+</style>

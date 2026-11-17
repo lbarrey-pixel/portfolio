@@ -1,21 +1,32 @@
 ---
-// A slow, endless band of words. The second copy exists only to close the loop.
+// A slow, endless band of words. Only the first list is real; the copies exist to fill the
+// width and close the loop, and are hidden from assistive tech.
+type Item = string | { text: string; lang?: string };
+
 interface Props {
-  items: string[];
+  items: Item[];
   label?: string;
+  size?: 'md' | 'lg';
+  /** Copies of the list per half. Raise it when the items are too few to span a wide screen. */
+  repeat?: number;
 }
 
-const { items, label } = Astro.props;
+const { items, label, size = 'md', repeat = 1 } = Astro.props;
+const list = items.map((item) => (typeof item === 'string' ? { text: item } : item));
+const copies = Array.from({ length: repeat * 2 }, (_, i) => i);
 ---
 
-<div class="marquee" role="region" aria-label={label}>
+<div class={`marquee marquee--${size}`} role="region" aria-label={label}>
   <div class="marquee__track">
-    <ul class="marquee__list">
-      {items.map((item) => <li>{item}</li>)}
-    </ul>
-    <ul class="marquee__list" aria-hidden="true">
-      {items.map((item) => <li>{item}</li>)}
-    </ul>
+    {
+      copies.map((i) => (
+        <ul class="marquee__list" aria-hidden={i > 0 ? 'true' : undefined}>
+          {list.map((item) => (
+            <li lang={item.lang}>{item.text}</li>
+          ))}
+        </ul>
+      ))
+    }
   </div>
 </div>
 
@@ -62,6 +73,27 @@ const { items, label } = Astro.props;
     margin-inline: var(--space-6);
     border: 1px solid var(--acc);
     border-radius: 50%;
+  }
+
+  .marquee--lg {
+    padding-block: var(--space-5);
+  }
+
+  .marquee--lg .marquee__track {
+    animation-duration: 60s;
+  }
+
+  .marquee--lg .marquee__list li {
+    font-size: clamp(3rem, 1.4rem + 7vw, 7.5rem);
+    line-height: 1;
+    letter-spacing: -0.03em;
+    color: var(--acc);
+  }
+
+  .marquee--lg .marquee__list li::after {
+    width: 0.14em;
+    height: 0.14em;
+    margin-inline: 0.45em;
   }
 
   @keyframes marquee {

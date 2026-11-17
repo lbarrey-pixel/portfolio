@@ -1,15 +1,16 @@
 ---
-// Page body. Nav and hero are designed; the other sections are plain until later tasks style them.
-import { SITE } from '../config';
+// Page body. Work and Try it are plain until their tasks build them.
 import { getContent, type Metric } from '../content';
 import type { Locale } from '../i18n/locales';
-import { emailHref, whatsappUrl } from '../lib/contact';
 import { formatNumber } from '../lib/format';
-import { Picture } from 'astro:assets';
-import portrait from '../assets/photo/leonardo-portrait.jpg';
+import About from './About.astro';
+import Contact from './Contact.astro';
+import Footer from './Footer.astro';
 import Hero from './Hero.astro';
 import Marquee from './Marquee.astro';
+import Method from './Method.astro';
 import Nav from './Nav.astro';
+import Pains from './Pains.astro';
 
 interface Props {
   locale: Locale;
@@ -17,8 +18,6 @@ interface Props {
 
 const { locale } = Astro.props;
 const c = getContent(locale);
-const waHref = whatsappUrl(SITE.phoneE164, c.contact.whatsappMessage);
-const mailHref = emailHref(SITE.email);
 const metricText = (m: Metric) => `${m.prefix ?? ''}${formatNumber(m.value, locale)}${m.suffix ?? ''}`;
 ---
 
@@ -28,37 +27,7 @@ const metricText = (m: Metric) => `${m.prefix ?? ''}${formatNumber(m.value, loca
   <Hero locale={locale} />
   <Marquee items={c.stack} label="Stack" />
 
-  {/* TEMPORARY photo preview for the visual review; the photo moves to #about in Task 4. */}
-  <section id="photo-preview" class="photo-preview" data-temp-preview>
-    <figure class="portrait">
-      <Picture
-        src={portrait}
-        alt={c.about.photoAlt}
-        formats={['avif', 'webp']}
-        widths={[240, 384]}
-        sizes="(min-width: 48rem) 240px, 60vw"
-      />
-    </figure>
-    <p>{c.about.text}</p>
-  </section>
-
-  <section id="pains">
-    <p>{c.pains.eyebrow}</p>
-    <h2>{c.pains.title}</h2>
-    <p>{c.pains.lead}</p>
-    {
-      c.pains.items.map((p) => (
-        <article>
-          <h3>{p.title}</h3>
-          <p>{p.problem}</p>
-          <p>
-            <strong>{p.answerLabel}:</strong> {p.answer}
-          </p>
-          {p.demo && <a href={`#demo-${p.demo}`}>{p.linkLabel} →</a>}
-        </article>
-      ))
-    }
-  </section>
+  <Pains locale={locale} />
 
   <section id="work">
     <p>{c.work.eyebrow}</p>
@@ -115,84 +84,9 @@ const metricText = (m: Metric) => `${m.prefix ?? ''}${formatNumber(m.value, loca
     }
   </section>
 
-  <section id="method">
-    <p>{c.method.eyebrow}</p>
-    <h2>{c.method.title}</h2>
-    <p>{c.method.lead}</p>
-    <ol>
-      {
-        c.method.steps.map((s) => (
-          <li>
-            <h3>{s.title}</h3>
-            <p>{s.text}</p>
-          </li>
-        ))
-      }
-    </ol>
-    <h3>{c.method.scenarioTitle}</h3>
-    <p>{c.method.scenarioLead}</p>
-    <pre>{c.method.scenario.map((l) => `${l.kw} ${l.text}`).join('\n')}</pre>
-  </section>
-
-  <section id="about">
-    <p>{c.about.eyebrow}</p>
-    <p>{c.about.text}</p>
-  </section>
-
-  <section id="contact">
-    <p>{c.contact.eyebrow}</p>
-    <h2>{c.contact.title}</h2>
-    <p>{c.contact.text}</p>
-    <p>{SITE.phoneDisplay}</p>
-    <a href={waHref} target="_blank" rel="noopener">{c.contact.whatsapp}</a>
-    {mailHref && <a href={mailHref}>{c.contact.email}</a>}
-  </section>
+  <Method locale={locale} />
+  <About locale={locale} />
+  <Contact locale={locale} />
 </main>
 
-<footer>
-  <p>{SITE.name} · {SITE.city} · {c.footer.note}</p>
-</footer>
-
-<style>
-  /* Temporary block (see above). */
-  .photo-preview {
-    display: grid;
-    grid-template-columns: minmax(0, 15rem) minmax(0, 36rem);
-    gap: var(--space-6);
-    align-items: end;
-  }
-
-  .photo-preview p {
-    color: var(--mute);
-  }
-
-  /* Photo treatment: quieter colour (the sky stops shouting) and a faint forest cast. */
-  .portrait {
-    position: relative;
-    overflow: hidden;
-    border-radius: var(--radius-lg);
-    background: var(--card);
-  }
-
-  .portrait :global(img) {
-    width: 100%;
-    height: auto;
-    filter: saturate(0.6) sepia(0.16) contrast(1.03);
-  }
-
-  .portrait::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: var(--acc);
-    mix-blend-mode: color;
-    opacity: 0.18;
-    pointer-events: none;
-  }
-
-  @media (max-width: 47.99rem) {
-    .photo-preview {
-      grid-template-columns: minmax(0, 15rem);
-    }
-  }
-</style>
+<Footer locale={locale} />

@@ -1,0 +1,51 @@
+---
+import { SITE } from '../config';
+import { getContent } from '../content';
+import type { Locale } from '../i18n/locales';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const c = getContent(locale);
+---
+
+<footer class="footer">
+  <div class="wrap footer__inner">
+    <p class="footer__name">{SITE.name}</p>
+    <p>{SITE.city}</p>
+    <p class="footer__note">{c.footer.note}</p>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    border-top: 1px solid var(--ink);
+    padding-block: var(--space-5) var(--space-6);
+    font: 400 var(--step--1) / 1.5 var(--font-mono);
+    color: var(--mute);
+  }
+
+  .footer__inner {
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: var(--space-6);
+    row-gap: var(--space-2);
+  }
+
+  .footer__name {
+    color: var(--ink);
+  }
+
+  .footer__note {
+    margin-left: auto;
+  }
+
+  @media (max-width: 47.99rem) {
+    .footer__note {
+      flex-basis: 100%;
+      margin-left: 0;
+    }
+  }
+</style>

@@ -1,0 +1,173 @@
+---
+// Contact: the big moving line in both languages, a short invitation, one main action (WhatsApp).
+import { SITE } from '../config';
+import { getContent } from '../content';
+import { otherLocale, type Locale } from '../i18n/locales';
+import { emailHref, whatsappUrl } from '../lib/contact';
+import Marquee from './Marquee.astro';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const c = getContent(locale);
+const other = otherLocale(locale);
+const otherLang = other === 'pt-br' ? 'pt-BR' : 'en';
+const otherLines = getContent(other).contact.marquee;
+// Interleave the two languages: "Let's build it · Vamos construir · ..."
+const lines = c.contact.marquee.flatMap((text, i) => [
+  { text },
+  ...(otherLines[i] ? [{ text: otherLines[i], lang: otherLang }] : []),
+]);
+const waHref = whatsappUrl(SITE.phoneE164, c.contact.whatsappMessage);
+// The email button turns on by itself the day SITE.email is set.
+const mailHref = emailHref(SITE.email);
+---
+
+<section id="contact" class="section contact">
+  <Marquee items={lines} label={c.contact.eyebrow} size="lg" repeat={2} />
+
+  <div class="wrap contact__inner">
+    <div class="contact__copy" data-reveal>
+      <p class="section__tag">{c.contact.eyebrow}</p>
+      <h2 class="contact__title">{c.contact.title}</h2>
+      <p class="contact__text">{c.contact.text}</p>
+    </div>
+
+    <div class="contact__actions" data-reveal>
+      <a class="btn btn--primary contact__wa" href={waHref} target="_blank" rel="noopener" data-cta="whatsapp" data-magnetic>
+        {c.contact.whatsapp}
+      </a>
+      {
+        mailHref && (
+          <a class="btn btn--ghost" href={mailHref} data-cta="email" data-magnetic>
+            {c.contact.email}
+          </a>
+        )
+      }
+      <p class="contact__phone">
+        <span data-phone>{SITE.phoneDisplay}</span>
+        <button type="button" class="contact__copybtn" data-copy={SITE.phoneDisplay}>{c.contact.copy}</button>
+        <span class="contact__copied" role="status" data-copied-text={c.contact.copied}></span>
+      </p>
+    </div>
+  </div>
+</section>
+
+<script>
+  // Copy the number; say so in the status line. Without clipboard access the number is still on screen.
+  document.querySelectorAll<HTMLButtonElement>('[data-copy]').forEach((btn) => {
+    const status = btn.parentElement?.querySelector<HTMLElement>('[data-copied-text]');
+    let timer = 0;
+    btn.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(btn.dataset.copy ?? '');
+      } catch {
+        return;
+      }
+      if (!status) return;
+      status.textContent = status.dataset.copiedText ?? '';
+      window.clearTimeout(timer);
+      timer = window.setTimeout(() => (status.textContent = ''), 2600);
+    });
+  });
+</script>
+
+<style>
+  .contact {
+    padding-top: 0;
+  }
+
+  .contact__inner {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: var(--space-5);
+    row-gap: var(--space-6);
+    align-items: end;
+    margin-top: var(--space-8);
+  }
+
+  .contact__copy {
+    grid-column: 1 / span 7;
+    display: grid;
+    gap: var(--space-4);
+  }
+
+  .contact__title {
+    font: 500 var(--step-4) / 1.02 var(--font-body);
+    letter-spacing: -0.035em;
+    text-wrap: balance;
+  }
+
+  .contact__text {
+    max-width: 52ch;
+    font-size: 1.0625rem;
+    line-height: 1.6;
+    color: var(--mute);
+  }
+
+  .contact__actions {
+    grid-column: 9 / -1;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--space-3);
+  }
+
+  .contact__wa {
+    min-height: 3.75rem;
+    font-size: 1.0625rem;
+  }
+
+  .contact__phone {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    column-gap: var(--space-4);
+    font: 400 var(--step--1) / 1.4 var(--font-mono);
+    color: var(--mute);
+  }
+
+  .contact__copybtn {
+    min-height: 2.75rem;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--acc);
+    font: inherit;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    cursor: pointer;
+  }
+
+  .contact__copybtn:hover {
+    color: var(--ink);
+  }
+
+  .contact__copied {
+    color: var(--acc);
+  }
+
+  @media (max-width: 63.99rem) {
+    .contact__copy,
+    .contact__actions {
+      grid-column: 1 / -1;
+    }
+
+    .contact__actions {
+      max-width: 26rem;
+    }
+  }
+
+  @media (max-width: 47.99rem) {
+    .contact__inner {
+      margin-top: var(--space-7);
+    }
+
+    .contact__title {
+      font-size: var(--step-3);
+      line-height: 1.05;
+    }
+  }
+</style>

@@ -1,0 +1,209 @@
+---
+// "Problems I solve": six problems, each answered by a system. Four of them link to a demo.
+import { getContent } from '../content';
+import type { Locale } from '../i18n/locales';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const c = getContent(locale);
+// The stack shown on a card is the stack of the project that solves it (nothing invented).
+const tagsFor = (id?: string) => c.work.projects.find((p) => p.id === id)?.tags.slice(0, 4) ?? [];
+---
+
+<section id="pains" class="section pains">
+  <div class="wrap">
+    <header class="section__head">
+      <p class="section__tag">{c.pains.eyebrow}</p>
+      <h2 class="section__title">{c.pains.title}</h2>
+      <p class="section__lead">{c.pains.lead}</p>
+    </header>
+
+    <ul class="pains__grid">
+      {
+        c.pains.items.map((p) => {
+          const tags = tagsFor(p.demo);
+          return (
+            <li class="pain" data-pain data-tilt data-reveal>
+              <h3 class="pain__title">{p.title}</h3>
+              <p class="pain__problem">{p.problem}</p>
+              <p class="pain__answer">
+                <span class="pain__label accent">{p.answerLabel}:</span> {p.answer}
+              </p>
+              {tags.length > 0 && (
+                <ul class="pain__stack">
+                  {tags.map((t) => (
+                    <li>{t}</li>
+                  ))}
+                </ul>
+              )}
+              {p.demo && (
+                <a class="pain__link" href={`#demo-${p.demo}`}>
+                  <span>{p.linkLabel}</span>
+                  <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true">
+                    <path d="M2 8h11M9 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.4" />
+                  </svg>
+                </a>
+              )}
+            </li>
+          );
+        })
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .pains__grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-4);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    perspective: 1200px;
+  }
+
+  /* A card is a sheet of the lighter paper. --gx/--gy follow the cursor (set by the motion layer). */
+  .pain {
+    --gx: 50%;
+    --gy: 0%;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    min-height: 19rem;
+    padding: var(--space-5);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    background:
+      radial-gradient(22rem circle at var(--gx) var(--gy), var(--acc-soft), transparent 62%) no-repeat,
+      var(--card);
+    background-size:
+      100% 100%,
+      auto;
+    transition:
+      border-color 0.5s var(--ease-out),
+      transform 0.6s var(--ease-out);
+  }
+
+  /* The glow is there only while the card is pointed at. */
+  .pain:not(:hover):not(:focus-within) {
+    background: var(--card);
+  }
+
+  .pain:hover,
+  .pain:focus-within {
+    border-color: var(--acc);
+  }
+
+  .pain__title {
+    max-width: 18ch;
+    font: 500 var(--step-2) / 1.08 var(--font-body);
+    letter-spacing: -0.03em;
+    text-wrap: balance;
+  }
+
+  .pain__problem {
+    color: var(--mute);
+  }
+
+  .pain__answer {
+    margin-top: auto;
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--line);
+  }
+
+  .pain__label {
+    font-size: 1.2em;
+    line-height: 1;
+  }
+
+  .pain__stack {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .pain__stack li {
+    padding: 0.2rem 0.45rem;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    font: 400 var(--step--2) / 1.2 var(--font-mono);
+    color: var(--mute);
+    transition:
+      border-color 0.5s var(--ease-out),
+      color 0.5s var(--ease-out),
+      background-color 0.5s var(--ease-out);
+    transition-delay: calc(var(--i, 0) * 50ms);
+  }
+
+  .pain__stack li:nth-child(2) {
+    --i: 1;
+  }
+  .pain__stack li:nth-child(3) {
+    --i: 2;
+  }
+  .pain__stack li:nth-child(4) {
+    --i: 3;
+  }
+
+  .pain:hover .pain__stack li,
+  .pain:focus-within .pain__stack li {
+    border-color: var(--acc);
+    background: var(--bg);
+    color: var(--acc);
+  }
+
+  .pain__link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    align-self: flex-start;
+    min-height: 2.75rem;
+    font-weight: 500;
+    color: var(--acc);
+    text-decoration: none;
+  }
+
+  .pain__link span {
+    background: linear-gradient(currentColor, currentColor) 0 100% / 100% 1px no-repeat;
+    padding-bottom: 2px;
+  }
+
+  .pain__link svg {
+    transition: translate 0.4s var(--ease-out);
+  }
+
+  .pain__link:hover svg {
+    translate: 4px 0;
+  }
+
+  /* Make the whole card a target for its demo link. */
+  .pain__link::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+  }
+
+  @media (max-width: 63.99rem) {
+    .pains__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 39.99rem) {
+    .pains__grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .pain {
+      min-height: 0;
+    }
+  }
+</style>

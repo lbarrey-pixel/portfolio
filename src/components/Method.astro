@@ -1,0 +1,197 @@
+---
+// Method: five steps in order (a real sequence, so they are numbered), then one approved scenario.
+import { getContent } from '../content';
+import type { Locale } from '../i18n/locales';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const c = getContent(locale);
+const code = (i: number) => String(i + 1).padStart(2, '0');
+---
+
+<section id="method" class="section method">
+  <div class="wrap">
+    <header class="section__head">
+      <p class="section__tag">{c.method.eyebrow}</p>
+      <h2 class="section__title">{c.method.title}</h2>
+      <p class="section__lead">{c.method.lead}</p>
+    </header>
+
+    <ol class="method__steps">
+      {
+        c.method.steps.map((s, i) => (
+          <li class="method__step" data-method-step data-reveal style={`--n:${i}`}>
+            <span class="method__code" aria-hidden="true">
+              {code(i)}
+            </span>
+            <h3 class="method__title">{s.title}</h3>
+            <p class="method__text">{s.text}</p>
+          </li>
+        ))
+      }
+    </ol>
+
+    <div class="scenario" data-reveal>
+      <div class="scenario__intro">
+        <h3 class="scenario__title">{c.method.scenarioTitle}</h3>
+        <p class="scenario__lead">{c.method.scenarioLead}</p>
+      </div>
+      <ol class="scenario__code">
+        {
+          c.method.scenario.map((l) => (
+            <li data-scenario-line>
+              <span class="scenario__kw">{l.kw}</span> <span>{l.text}</span>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* Same construction as the hero map: one ink rule on top, hairlines between the steps. */
+  .method__steps {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid var(--ink);
+  }
+
+  .method__step {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    padding: var(--space-5) var(--space-4) var(--space-6);
+    border-left: 1px solid var(--line);
+  }
+
+  .method__step:first-child {
+    padding-left: 0;
+    border-left: 0;
+  }
+
+  .method__code {
+    font: 400 var(--step--1) / 1.2 var(--font-mono);
+    color: var(--acc);
+  }
+
+  .method__title {
+    font: 500 var(--step-1) / 1.12 var(--font-body);
+    letter-spacing: -0.02em;
+  }
+
+  .method__text {
+    font-size: 0.9375rem;
+    color: var(--mute);
+  }
+
+  .scenario {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: var(--space-5);
+    row-gap: var(--space-5);
+    align-items: start;
+    margin-top: var(--space-8);
+  }
+
+  .scenario__intro {
+    grid-column: 1 / span 4;
+    display: grid;
+    gap: var(--space-3);
+  }
+
+  .scenario__title {
+    font: italic 400 var(--step-3) / 1.05 var(--font-display);
+    letter-spacing: -0.015em;
+    color: var(--acc);
+  }
+
+  .scenario__lead {
+    color: var(--mute);
+  }
+
+  /* The scenario itself: the one dark surface on the page, written in the machine voice. */
+  .scenario__code {
+    grid-column: 6 / -1;
+    margin: 0;
+    padding: var(--space-6);
+    list-style: none;
+    border-radius: var(--radius-lg);
+    background: var(--ink);
+    color: var(--on-acc);
+    font: 400 0.9375rem / 1.9 var(--font-mono);
+  }
+
+  .scenario__code li {
+    display: grid;
+    grid-template-columns: 5.5ch minmax(0, 1fr);
+    column-gap: var(--space-4);
+  }
+
+  .scenario__kw {
+    color: #8fc7a6;
+    text-align: right;
+  }
+
+  @media (max-width: 63.99rem) {
+    .method__steps {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .method__step {
+      display: grid;
+      grid-template-columns: 3rem minmax(0, 1fr);
+      column-gap: var(--space-4);
+      row-gap: var(--space-2);
+      padding: var(--space-5) 0;
+      border-left: 0;
+      border-top: 1px solid var(--line);
+    }
+
+    .method__step:first-child {
+      border-top: 0;
+    }
+
+    .method__code {
+      grid-row: 1 / span 2;
+      padding-top: 0.3em;
+    }
+
+    .method__title,
+    .method__text {
+      grid-column: 2;
+    }
+
+    .scenario__intro,
+    .scenario__code {
+      grid-column: 1 / -1;
+    }
+  }
+
+  @media (max-width: 39.99rem) {
+    .scenario {
+      margin-top: var(--space-7);
+    }
+
+    .scenario__code {
+      padding: var(--space-5) var(--space-4);
+      font-size: var(--step--1);
+      line-height: 1.7;
+    }
+
+    .scenario__code li {
+      grid-template-columns: minmax(0, 1fr);
+      margin-bottom: var(--space-2);
+    }
+
+    .scenario__kw {
+      text-align: left;
+    }
+  }
+</style>
