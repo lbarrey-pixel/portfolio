@@ -2,7 +2,9 @@
 // "Try it": the interactive demos. Each keeps its own client-app look inside a device frame;
 // the section around them uses the portfolio's design.
 import '../demos/bakery/demo.css';
+import '../demos/quoting/demo.css';
 import { getContent } from '../content';
+import { strings as quoting } from '../demos/quoting/strings';
 import type { DemoId } from '../demos/types';
 import type { Locale } from '../i18n/locales';
 import DeviceFrame from './DeviceFrame.astro';
@@ -16,6 +18,7 @@ const c = getContent(locale);
 
 // Demos that exist so far, and the device each one runs in.
 const DEVICE: Partial<Record<DemoId, { variant: 'phone' | 'browser'; label?: string }>> = {
+  quoting: { variant: 'browser', label: quoting[locale].frameLabel },
   bakery: { variant: 'phone' },
 };
 const demos = c.work.projects.filter((p) => p.id in DEVICE);
@@ -86,9 +89,10 @@ const demos = c.work.projects.filter((p) => p.id in DEVICE);
 
 <script>
   import { mount as bakery } from '../demos/bakery/mount';
+  import { mount as quoting } from '../demos/quoting/mount';
   import { initTryIt } from '../scripts/tryit';
 
-  document.querySelectorAll<HTMLElement>('[data-try]').forEach((section) => initTryIt(section, { bakery }));
+  document.querySelectorAll<HTMLElement>('[data-try]').forEach((section) => initTryIt(section, { quoting, bakery }));
 </script>
 
 <style>

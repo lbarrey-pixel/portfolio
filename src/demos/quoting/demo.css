@@ -1,0 +1,259 @@
+/*
+ * Quoting desk demo: the client's back-office look (navy and blue), inside a browser frame.
+ * Everything is scoped under .demo-quoting.
+ */
+.demo-quoting {
+  display: grid;
+  grid-template-columns: 150px minmax(0, 1fr);
+  min-height: 32.5rem;
+  color: #1a2333;
+  font: 14px/1.45 var(--font-body);
+}
+
+.demo-quoting :focus-visible {
+  outline: 2px solid #2563eb;
+  outline-offset: 2px;
+}
+
+.demo-quoting .qt-side {
+  display: grid;
+  align-content: start;
+  gap: 4px;
+  padding: 14px 10px;
+  background: #0f1c3a;
+  color: #c9d4ea;
+  font-size: 13px;
+}
+
+.demo-quoting .qt-side b {
+  display: block;
+  margin-bottom: 10px;
+  color: #fff;
+  font: 700 14px/1.1 var(--font-body);
+}
+
+.demo-quoting .qt-side span {
+  padding: 7px 9px;
+  border-radius: 7px;
+}
+
+.demo-quoting .qt-side span.on {
+  background: #1e2f57;
+  color: #fff;
+}
+
+.demo-quoting .qt-main {
+  display: grid;
+  align-content: start;
+  gap: 12px;
+  min-width: 0;
+  padding: 18px;
+}
+
+.demo-quoting .qt-main h4 {
+  margin: 0;
+  font: 700 18px/1.2 var(--font-body);
+}
+
+.demo-quoting .qt-step {
+  font: 500 11px/1.2 var(--font-mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #5b6b86;
+}
+
+.demo-quoting .qt-intro {
+  color: #5b6b86;
+  font-size: 13px;
+}
+
+.demo-quoting textarea {
+  width: 100%;
+  min-height: 15rem;
+  padding: 12px;
+  border: 1.5px dashed #afc0da;
+  border-radius: 10px;
+  background: #fff;
+  color: #1a2333;
+  font: 13px/1.5 var(--font-mono);
+  resize: vertical;
+}
+
+.demo-quoting .qt-btn {
+  min-height: 2.5rem;
+  padding: 10px 14px;
+  border: 0;
+  border-radius: 8px;
+  background: #2563eb;
+  color: #fff;
+  font: 600 14px var(--font-body);
+  cursor: pointer;
+}
+
+.demo-quoting .qt-btn[disabled] {
+  opacity: 0.55;
+  cursor: default;
+}
+
+.demo-quoting .qt-btn--alt {
+  background: #fff;
+  color: #1a2333;
+  box-shadow: inset 0 0 0 1.5px #cbd5e1;
+}
+
+.demo-quoting .qt-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.demo-quoting .qt-tablewrap {
+  overflow-x: auto;
+  border: 1px solid #dde3ec;
+  border-radius: 10px;
+  background: #fff;
+}
+
+.demo-quoting table {
+  width: 100%;
+  min-width: 640px;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.demo-quoting th {
+  padding: 10px;
+  border-bottom: 1px solid #dde3ec;
+  background: #f8fafc;
+  color: #5b6b86;
+  font: 600 11px/1.2 var(--font-mono);
+  letter-spacing: 0.06em;
+  text-align: left;
+  text-transform: uppercase;
+}
+
+.demo-quoting td {
+  padding: 10px;
+  border-bottom: 1px solid #eef2f7;
+  vertical-align: top;
+}
+
+.demo-quoting th.n,
+.demo-quoting td.n {
+  text-align: right;
+  white-space: nowrap;
+}
+
+.demo-quoting td.n {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+.demo-quoting .qt-conf {
+  display: inline-block;
+  padding: 4px 7px;
+  border-radius: 999px;
+  font: 600 11px/1 var(--font-body);
+  white-space: nowrap;
+}
+
+.demo-quoting .qt-conf--high {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.demo-quoting .qt-conf--medium {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.demo-quoting .qt-conf--none {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.demo-quoting .qt-sub {
+  color: #64748b;
+  font-size: 12px;
+}
+
+.demo-quoting .qt-new {
+  animation: qt-new 1.6s ease-out;
+}
+
+@keyframes qt-new {
+  from {
+    background: #dbeafe;
+  }
+}
+
+.demo-quoting .qt-tot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 24px;
+  font-size: 14px;
+}
+
+.demo-quoting .qt-tot b {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+.demo-quoting .qt-tot input {
+  width: 72px;
+  padding: 6px;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 7px;
+  font: 16px var(--font-mono);
+}
+
+.demo-quoting pre {
+  margin: 0;
+  padding: 12px;
+  overflow-x: auto;
+  border-radius: 10px;
+  background: #0f172a;
+  color: #cbd5e1;
+  font: 12px/1.5 var(--font-mono);
+}
+
+.demo-quoting .qt-toast {
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: #dcfce7;
+  color: #166534;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.demo-quoting .qt-spin {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  vertical-align: -2px;
+  animation: qt-spin 0.7s linear infinite;
+}
+
+@keyframes qt-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 40rem) {
+  .demo-quoting {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .demo-quoting .qt-side {
+    display: none;
+  }
+
+  .demo-quoting .qt-main {
+    padding: 14px;
+  }
+}
