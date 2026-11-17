@@ -1,0 +1,156 @@
+---
+// One dialog for every screenshot gallery on the page (see scripts/lightbox.ts).
+import { getContent } from '../content';
+import type { Locale } from '../i18n/locales';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = getContent(locale).lightbox;
+---
+
+<dialog class="lightbox" data-lightbox data-of={t.of}>
+  <div class="lightbox__inner">
+    <header class="lightbox__bar">
+      <p class="lightbox__meta">
+        <span data-lightbox-caption></span>
+        <span class="lightbox__count" data-lightbox-count></span>
+      </p>
+      <button type="button" class="lightbox__btn" data-lightbox-close>{t.close}</button>
+    </header>
+
+    <div class="lightbox__frame">
+      <img data-lightbox-img alt="" decoding="async" />
+    </div>
+
+    <footer class="lightbox__nav">
+      <button type="button" class="lightbox__btn" data-lightbox-prev>{t.prev}</button>
+      <button type="button" class="lightbox__btn" data-lightbox-next>{t.next}</button>
+    </footer>
+  </div>
+</dialog>
+
+<script>
+  import { initLightbox } from '../scripts/lightbox';
+
+  initLightbox(document.body);
+</script>
+
+<style>
+  .lightbox {
+    width: 100vw;
+    height: 100vh;
+    height: 100dvh;
+    max-width: none;
+    max-height: none;
+    margin: 0;
+    padding: var(--space-4) var(--gutter) var(--space-5);
+    border: 0;
+    /* The dialog fills the screen, so it is its own backdrop. */
+    background: color-mix(in srgb, var(--ink) 96%, transparent);
+    color: var(--on-acc);
+  }
+
+  .lightbox::backdrop {
+    background: transparent;
+  }
+
+  .lightbox[open] {
+    display: grid;
+    animation: lightbox-in 0.4s var(--ease-out) both;
+  }
+
+  @keyframes lightbox-in {
+    from {
+      opacity: 0;
+    }
+  }
+
+  .lightbox__inner {
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    gap: var(--space-4);
+    width: 100%;
+    max-width: 82rem;
+    min-height: 0;
+    margin-inline: auto;
+    /* clicks in the gaps fall through to the dialog and close it */
+    pointer-events: none;
+  }
+
+  .lightbox__inner > * {
+    pointer-events: auto;
+  }
+
+  .lightbox__bar,
+  .lightbox__nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+  }
+
+  .lightbox__nav {
+    justify-content: center;
+    min-height: 2.75rem;
+  }
+
+  .lightbox__meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    column-gap: var(--space-4);
+    font: italic 400 var(--step-1) / 1.2 var(--font-display);
+  }
+
+  .lightbox__count {
+    font: 400 var(--step--1) / 1.2 var(--font-mono);
+    opacity: 0.7;
+  }
+
+  .lightbox__btn {
+    min-height: 2.75rem;
+    padding: 0 var(--space-4);
+    border: 1px solid color-mix(in srgb, var(--on-acc) 40%, transparent);
+    border-radius: var(--radius);
+    background: none;
+    color: inherit;
+    font: 500 var(--step--1) / 1 var(--font-body);
+    cursor: pointer;
+    transition:
+      background-color 0.3s var(--ease-out),
+      color 0.3s var(--ease-out);
+  }
+
+  .lightbox__btn:hover {
+    background: var(--on-acc);
+    color: var(--ink);
+  }
+
+  .lightbox__btn:focus-visible {
+    outline-color: var(--on-acc);
+  }
+
+  .lightbox__btn[hidden] {
+    display: none;
+  }
+
+  .lightbox__frame {
+    display: grid;
+    place-items: center;
+    min-height: 0;
+    pointer-events: none;
+  }
+
+  .lightbox__frame img {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    border-radius: var(--radius-lg);
+    pointer-events: auto;
+  }
+</style>
