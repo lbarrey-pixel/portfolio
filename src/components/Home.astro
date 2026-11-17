@@ -1,5 +1,5 @@
 ---
-// Page body. Try it is plain until its task builds it.
+// Page body: every section, in page order.
 import { getContent } from '../content';
 import type { Locale } from '../i18n/locales';
 import About from './About.astro';
@@ -10,6 +10,7 @@ import Marquee from './Marquee.astro';
 import Method from './Method.astro';
 import Nav from './Nav.astro';
 import Pains from './Pains.astro';
+import TryIt from './TryIt.astro';
 import Work from './Work.astro';
 
 interface Props {
@@ -30,20 +31,7 @@ const c = getContent(locale);
 
   <Work locale={locale} />
 
-  <section id="try">
-    <p>{c.tryIt.eyebrow}</p>
-    <h2>{c.tryIt.title}</h2>
-    <p>{c.tryIt.lead}</p>
-    {
-      c.work.projects.map((p) => (
-        <div id={`demo-${p.id}`}>
-          <h3>{p.tab}</h3>
-          <ul>{c.tryIt.hints[p.id].map((h) => <li>{h}</li>)}</ul>
-          <p>{c.tryIt.fakeNote[p.id]}</p>
-        </div>
-      ))
-    }
-  </section>
+  <TryIt locale={locale} />
 
   <Method locale={locale} />
   <About locale={locale} />

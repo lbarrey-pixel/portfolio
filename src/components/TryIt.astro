@@ -1,0 +1,271 @@
+---
+// "Try it": the interactive demos. Each keeps its own client-app look inside a device frame;
+// the section around them uses the portfolio's design.
+import '../demos/bakery/demo.css';
+import { getContent } from '../content';
+import type { DemoId } from '../demos/types';
+import type { Locale } from '../i18n/locales';
+import DeviceFrame from './DeviceFrame.astro';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const c = getContent(locale);
+
+// Demos that exist so far, and the device each one runs in.
+const DEVICE: Partial<Record<DemoId, { variant: 'phone' | 'browser'; label?: string }>> = {
+  bakery: { variant: 'phone' },
+};
+const demos = c.work.projects.filter((p) => p.id in DEVICE);
+---
+
+<section id="try" class="section try" data-try data-locale={locale}>
+  <div class="wrap">
+    <header class="section__head">
+      <p class="section__tag">{c.tryIt.eyebrow}</p>
+      <h2 class="section__title" data-reveal-lines>{c.tryIt.title}</h2>
+      <p class="section__lead" data-reveal>{c.tryIt.lead}</p>
+    </header>
+
+    <div class="try__tabs" role="tablist" aria-label={c.tryIt.eyebrow}>
+      {
+        demos.map((p, i) => (
+          <button
+            type="button"
+            role="tab"
+            class="try__tab"
+            id={`try-tab-${p.id}`}
+            aria-selected={i === 0 ? 'true' : 'false'}
+            aria-controls={`demo-${p.id}`}
+            tabindex={i === 0 ? 0 : -1}
+            data-demo-tab={p.id}
+          >
+            {p.tab}
+          </button>
+        ))
+      }
+    </div>
+
+    {
+      demos.map((p, i) => {
+        const device = DEVICE[p.id]!;
+        return (
+          <div
+            class:list={['demo', `demo--${device.variant}`]}
+            id={`demo-${p.id}`}
+            role="tabpanel"
+            aria-labelledby={`try-tab-${p.id}`}
+            data-demo-panel={p.id}
+            hidden={i !== 0}
+          >
+            <div class="demo__side">
+              <h3 class="demo__title">{p.tab}</h3>
+              <ol class="demo__hints">
+                {c.tryIt.hints[p.id].map((h) => (
+                  <li>{h}</li>
+                ))}
+              </ol>
+              <p class="demo__note">{c.tryIt.fakeNote[p.id]}</p>
+              <button type="button" class="btn btn--ghost demo__reset" data-demo-reset={p.id}>
+                {c.tryIt.reset}
+              </button>
+            </div>
+            <div class="demo__device">
+              <DeviceFrame variant={device.variant} label={device.label}>
+                <div class="demo__root" data-demo-root={p.id} />
+              </DeviceFrame>
+            </div>
+          </div>
+        );
+      })
+    }
+  </div>
+</section>
+
+<script>
+  import { mount as bakery } from '../demos/bakery/mount';
+  import { initTryIt } from '../scripts/tryit';
+
+  document.querySelectorAll<HTMLElement>('[data-try]').forEach((section) => initTryIt(section, { bakery }));
+</script>
+
+<style>
+  .try {
+    border-top: 1px solid var(--line);
+  }
+
+  .try__tabs {
+    display: flex;
+    gap: var(--space-5);
+    overflow-x: auto;
+    scrollbar-width: none;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .try__tabs::-webkit-scrollbar {
+    display: none;
+  }
+
+  .try__tab {
+    position: relative;
+    flex: none;
+    min-height: 3rem;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--mute);
+    font: 500 var(--step-0) / 1 var(--font-body);
+    white-space: nowrap;
+    cursor: pointer;
+    transition: color 0.3s var(--ease-out);
+  }
+
+  .try__tab::after {
+    content: '';
+    position: absolute;
+    inset: auto 0 0;
+    height: 2px;
+    background: var(--acc);
+    scale: 0 1;
+    transform-origin: left;
+    transition: scale 0.5s var(--ease-out);
+  }
+
+  .try__tab:hover,
+  .try__tab[aria-selected='true'] {
+    color: var(--ink);
+  }
+
+  .try__tab[aria-selected='true']::after {
+    scale: 1 1;
+  }
+
+  .try__tab:focus-visible {
+    outline-offset: -2px;
+  }
+
+  .demo {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: var(--space-5);
+    row-gap: var(--space-6);
+    align-items: start;
+    padding-top: var(--space-7);
+    /* a link to #demo-x lands with the tabs still in view */
+    scroll-margin-top: calc(var(--nav-h) + 4.5rem);
+    animation: demo-in 0.7s var(--ease-out) both;
+  }
+
+  .demo[hidden] {
+    display: none;
+  }
+
+  @keyframes demo-in {
+    from {
+      opacity: 0;
+      transform: translateY(0.75rem);
+    }
+  }
+
+  .demo__side {
+    grid-column: 1 / span 4;
+    display: grid;
+    gap: var(--space-4);
+    justify-items: start;
+  }
+
+  .demo__device {
+    grid-column: 6 / -1;
+    min-width: 0;
+  }
+
+  /* Browser demos need the width: instructions sit in a row above the window. */
+  .demo--browser .demo__side,
+  .demo--browser .demo__device {
+    grid-column: 1 / -1;
+  }
+
+  .demo--browser .demo__side {
+    grid-template-columns: minmax(0, 16rem) minmax(0, 1fr) auto;
+    column-gap: var(--space-6);
+    align-items: start;
+    justify-items: stretch;
+  }
+
+  .demo--browser .demo__note {
+    grid-column: 2;
+  }
+
+  .demo--browser .demo__reset {
+    grid-column: 3;
+    grid-row: 1;
+  }
+
+  .demo__title {
+    font: italic 400 var(--step-3) / 1.05 var(--font-display);
+    letter-spacing: -0.015em;
+    color: var(--acc);
+  }
+
+  /* The hints are steps to follow, in order. */
+  .demo__hints {
+    display: grid;
+    gap: var(--space-2);
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    counter-reset: hint;
+  }
+
+  .demo__hints li {
+    display: grid;
+    grid-template-columns: 2rem minmax(0, 1fr);
+    padding-block: var(--space-2);
+    border-top: 1px solid var(--line);
+    counter-increment: hint;
+  }
+
+  .demo__hints li::before {
+    content: counter(hint, decimal-leading-zero);
+    padding-top: 0.25em;
+    font: 400 var(--step--2) / 1.2 var(--font-mono);
+    color: var(--acc);
+  }
+
+  .demo__note {
+    font: 400 var(--step--1) / 1.5 var(--font-mono);
+    color: var(--mute);
+  }
+
+  .demo__root {
+    height: 100%;
+  }
+
+  @media (max-width: 63.99rem) {
+    .demo__side,
+    .demo__device,
+    .demo--browser .demo__side {
+      grid-column: 1 / -1;
+    }
+
+    .demo--browser .demo__side {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .demo--browser .demo__note,
+    .demo--browser .demo__reset {
+      grid-column: 1;
+      grid-row: auto;
+      justify-self: start;
+    }
+  }
+
+  @media (max-width: 47.99rem) {
+    .demo {
+      padding-top: var(--space-6);
+    }
+  }
+</style>

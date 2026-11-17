@@ -1,0 +1,327 @@
+/*
+ * Bakery demo: the client app's own theme (warm caramel), not the portfolio's.
+ * Everything is scoped under .demo-bakery, which sits inside a phone frame.
+ */
+.demo-bakery {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: #f6ede0;
+  color: #4a2412;
+  font: 14px/1.45 var(--font-body);
+}
+
+.demo-bakery button {
+  font-family: inherit;
+}
+
+.demo-bakery :focus-visible {
+  outline: 2px solid #4a2412;
+  outline-offset: 2px;
+}
+
+.demo-bakery .bk-head {
+  flex: none;
+  padding: 22px 16px 26px;
+  border-radius: 0 0 50% 50% / 0 0 18px 18px;
+  background: #933a1a;
+  color: #fff5ea;
+}
+
+.demo-bakery .bk-head b {
+  display: block;
+  font: 700 18px/1.1 var(--font-body);
+}
+
+.demo-bakery .bk-head small {
+  font-size: 12px;
+  opacity: 0.85;
+}
+
+.demo-bakery .bk-head :focus-visible {
+  outline-color: #fff5ea;
+}
+
+.demo-bakery .bk-body {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  padding: 14px 14px 90px;
+}
+
+.demo-bakery .bk-section {
+  font: 700 16px/1.2 var(--font-body);
+}
+
+.demo-bakery .bk-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 0;
+  border-bottom: 1px solid #e6d4bf;
+}
+
+.demo-bakery .bk-item__text {
+  flex: 1;
+  min-width: 0;
+}
+
+.demo-bakery .bk-item b {
+  display: block;
+  font-size: 14px;
+}
+
+.demo-bakery .bk-item small {
+  color: #8a5a3e;
+  font-size: 12px;
+}
+
+.demo-bakery .bk-price {
+  font-weight: 700;
+  font-size: 13px;
+}
+
+.demo-bakery .bk-dot {
+  flex: none;
+  width: 52px;
+  height: 52px;
+  border: 3px solid #c49a72;
+  border-radius: 50%;
+  background: radial-gradient(circle at 50% 45%, #e9a64b 0 34%, #c66b1e 35% 52%, #f2ddbe 53%);
+}
+
+.demo-bakery .bk-dot.b {
+  background: radial-gradient(circle at 50% 45%, #7a3e1c 0 34%, #4a2412 35% 52%, #f2ddbe 53%);
+}
+
+.demo-bakery .bk-dot.c {
+  background: radial-gradient(circle at 50% 45%, #f5c46b 0 30%, #b5651d 31% 50%, #f2ddbe 51%);
+}
+
+.demo-bakery .bk-dot.d {
+  background: radial-gradient(circle at 50% 45%, #e9a64b 0 22%, #b23a2e 23% 30%, #e9a64b 31% 50%, #f2ddbe 51%);
+}
+
+.demo-bakery .bk-add {
+  flex: none;
+  width: 40px;
+  height: 40px;
+  border: 0;
+  border-radius: 999px;
+  background: #933a1a;
+  color: #fff;
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.demo-bakery .bk-qty {
+  min-width: 18px;
+  font: 600 13px/1 var(--font-mono);
+  text-align: center;
+}
+
+.demo-bakery .bk-cart {
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: 12px;
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 14px;
+  border: 0;
+  border-radius: 14px;
+  background: #933a1a;
+  color: #fff;
+  font: 600 15px/1.1 var(--font-body);
+  text-align: left;
+  cursor: pointer;
+}
+
+.demo-bakery .bk-cart[disabled] {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.demo-bakery .bk-cart--inline {
+  position: static;
+  justify-content: center;
+  margin-top: 12px;
+}
+
+.demo-bakery .bk-cart--wide {
+  width: 100%;
+  margin-top: 0;
+}
+
+.demo-bakery .bk-field {
+  display: grid;
+  gap: 6px;
+  margin-top: 12px;
+  justify-items: start;
+}
+
+.demo-bakery .bk-field label {
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.demo-bakery .bk-field input {
+  width: 100%;
+  padding: 10px;
+  border: 1.5px solid #cda889;
+  border-radius: 10px;
+  background: #fffbf5;
+  color: #4a2412;
+  font: 16px var(--font-body);
+}
+
+.demo-bakery .bk-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 4px 0;
+  font-size: 14px;
+}
+
+.demo-bakery .bk-row > span:last-child {
+  flex: none;
+  text-align: right;
+}
+
+.demo-bakery .bk-row--total {
+  margin-top: 6px;
+  padding-top: 8px;
+  border-top: 1px solid #e6d4bf;
+  font-weight: 700;
+}
+
+.demo-bakery .bk-sum {
+  margin-top: 14px;
+}
+
+.demo-bakery .bk-note {
+  margin-top: 10px;
+  padding: 10px;
+  border: 1px solid #e6d4bf;
+  border-radius: 10px;
+  background: #fff8ee;
+  font-size: 13px;
+}
+
+.demo-bakery .bk-link {
+  min-height: 28px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: #933a1a;
+  font: 600 13px var(--font-body);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.demo-bakery .bk-back {
+  display: block;
+  margin-bottom: 8px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: #fff5ea;
+  font: 500 13px var(--font-body);
+  opacity: 0.9;
+  cursor: pointer;
+}
+
+.demo-bakery .bk-msg {
+  margin-top: 6px;
+  font-size: 12px;
+  color: #933a1a;
+}
+
+.demo-bakery .bk-msg:empty {
+  display: none;
+}
+
+.demo-bakery .bk-pix {
+  display: grid;
+  justify-items: center;
+  gap: 10px;
+  margin-top: 8px;
+  text-align: center;
+}
+
+.demo-bakery .bk-pix canvas {
+  width: 170px;
+  height: 170px;
+  padding: 8px;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.demo-bakery .bk-code {
+  width: 100%;
+  padding: 8px;
+  border: 1px dashed #cda889;
+  border-radius: 8px;
+  background: #fffbf5;
+  font: 11px/1.4 var(--font-mono);
+  word-break: break-all;
+}
+
+.demo-bakery .bk-help {
+  font-size: 13px;
+}
+
+.demo-bakery .bk-small {
+  margin-top: 6px;
+  font-size: 12px;
+  color: #8a5a3e;
+}
+
+.demo-bakery .bk-ok {
+  width: 100%;
+  padding: 12px;
+  border-radius: 12px;
+  background: #e3f2e8;
+  color: #1f5c3a;
+  font-size: 14px;
+}
+
+.demo-bakery .bk-order {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #e6d4bf;
+  border-radius: 12px;
+  background: #fff;
+  font-size: 13px;
+  text-align: left;
+}
+
+.demo-bakery .bk-pill {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: #f6d9b8;
+  color: #7a3e1c;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.demo-bakery .bk-spin {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  vertical-align: -2px;
+  animation: bk-spin 0.7s linear infinite;
+}
+
+@keyframes bk-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
