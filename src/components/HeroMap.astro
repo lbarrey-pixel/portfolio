@@ -1,0 +1,338 @@
+---
+// The hero's "live system map": one of Leonardo's systems running as a 5-step flow.
+import type { FlowStep } from '../content';
+
+interface Props {
+  caption: string;
+  steps: FlowStep[];
+  log: string[];
+}
+
+const { caption, steps, log } = Astro.props;
+---
+
+<figure class="map" data-hero-map data-log-lines={JSON.stringify(log)}>
+  <figcaption class="map__head">
+    <span class="map__pulse" aria-hidden="true"></span>
+    {caption}
+  </figcaption>
+
+  <div class="map__body">
+    <ol class="map__steps">
+      {
+        steps.map((s) => (
+          <li class="map__step" data-step>
+            <span class="map__code">{s.code}</span>
+            <span class="map__title">{s.title}</span>
+            <span class="map__tech" data-tech>{s.tech}</span>
+          </li>
+        ))
+      }
+    </ol>
+    <div class="map__rail" aria-hidden="true">
+      <span class="map__fill"></span>
+      <span class="map__dot"></span>
+    </div>
+  </div>
+
+  <p class="map__log">
+    <span class="map__time" data-log-time aria-hidden="true"></span>
+    <span class="map__line" data-log>{log[0]}</span>
+    <span class="map__caret" aria-hidden="true"></span>
+  </p>
+</figure>
+
+<script>
+  import { startHeroMap } from '../scripts/hero-map';
+
+  document.querySelectorAll<HTMLElement>('[data-hero-map]').forEach((root) => {
+    const log = JSON.parse(root.dataset.logLines ?? '[]') as string[];
+    let stop: (() => void) | null = null;
+    // Only run while the map is on screen.
+    new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting && !stop) stop = startHeroMap(root, log);
+      else if (!entry.isIntersecting && stop) {
+        stop();
+        stop = null;
+      }
+    }).observe(root);
+  });
+</script>
+
+<style>
+  .map {
+    --i: 0;
+    --cols: 5;
+    position: relative;
+    margin: 0;
+    border-top: 1px solid var(--ink);
+    padding-top: var(--space-4);
+  }
+
+  .map__head {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    font: 500 var(--step--1) / 1.2 var(--font-mono);
+    color: var(--acc);
+  }
+
+  .map__pulse {
+    position: relative;
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    background: var(--acc-live);
+  }
+
+  .map__pulse::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: var(--acc-live);
+    animation: pulse 2.6s var(--ease-out) infinite;
+  }
+
+  @keyframes pulse {
+    from {
+      transform: scale(1);
+      opacity: 0.6;
+    }
+    to {
+      transform: scale(3.2);
+      opacity: 0;
+    }
+  }
+
+  .map__body {
+    position: relative;
+    margin-top: var(--space-4);
+  }
+
+  .map__steps {
+    display: grid;
+    grid-template-columns: repeat(var(--cols), minmax(0, 1fr));
+    padding: 0;
+    list-style: none;
+  }
+
+  .map__step {
+    position: relative;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    gap: var(--space-2);
+    padding: var(--space-4) var(--space-4) var(--space-5);
+    border-left: 1px solid var(--line);
+    transition:
+      background-color 0.7s var(--ease-out),
+      color 0.7s var(--ease-out);
+  }
+
+  .map__step:first-child {
+    border-left-color: transparent;
+  }
+
+  .map__code {
+    font: 400 var(--step--2) / 1.2 var(--font-mono);
+    color: var(--mute);
+    transition: color 0.7s var(--ease-out);
+  }
+
+  .map__title {
+    font: 500 var(--step-1) / 1.12 var(--font-body);
+    letter-spacing: -0.015em;
+    text-wrap: balance;
+  }
+
+  .map__tech {
+    justify-self: start;
+    padding: 0.2rem 0.45rem;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    font: 400 var(--step--2) / 1.2 var(--font-mono);
+    color: var(--mute);
+    transition:
+      color 0.7s var(--ease-out),
+      border-color 0.7s var(--ease-out),
+      background-color 0.7s var(--ease-out);
+  }
+
+  /* done: the step has run */
+  .map__step:global(.is-on) .map__code {
+    color: var(--acc);
+  }
+
+  .map__step:global(.is-on) .map__tech {
+    border-color: var(--acc);
+    color: var(--acc);
+    background: var(--acc-soft);
+  }
+
+  /* current: the step running right now */
+  .map__step:global(.is-current) {
+    background: var(--acc);
+    color: var(--on-acc);
+  }
+
+  .map__step:global(.is-current) .map__code {
+    color: color-mix(in srgb, var(--on-acc) 72%, transparent);
+  }
+
+  .map__step:global(.is-current) .map__tech {
+    border-color: color-mix(in srgb, var(--on-acc) 45%, transparent);
+    background: transparent;
+    color: var(--on-acc);
+  }
+
+  /* rail with travelling dot: horizontal under the columns */
+  .map__rail {
+    position: relative;
+    height: 1px;
+    background: var(--line);
+  }
+
+  .map__fill,
+  .map__dot {
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+
+  .map__fill {
+    height: 1px;
+    width: calc((var(--i) + 0.5) * 100% / var(--cols));
+    background: var(--acc);
+    transition: width 0.9s var(--ease-out);
+  }
+
+  .map__dot {
+    width: 0.6875rem;
+    height: 0.6875rem;
+    margin: -0.34375rem 0 0 -0.34375rem;
+    border-radius: 50%;
+    background: var(--acc);
+    box-shadow: 0 0 0 0.3rem var(--bg);
+    left: calc((var(--i) + 0.5) * 100% / var(--cols));
+    transition: left 0.9s var(--ease-out);
+  }
+
+  .map:not([data-running]) .map__fill,
+  .map:not([data-running]) .map__dot {
+    opacity: 0;
+  }
+
+  .map__log {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-4);
+    min-height: 1.5rem;
+    margin-top: var(--space-4);
+    font: 400 var(--step--1) / 1.5 var(--font-mono);
+    color: var(--ink);
+  }
+
+  .map__time {
+    color: var(--mute);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .map__line {
+    display: inline-block;
+    overflow: hidden;
+    white-space: nowrap;
+    vertical-align: bottom;
+  }
+
+  .map__caret {
+    width: 0.55em;
+    height: 1.05em;
+    margin-left: -0.75rem;
+    align-self: center;
+    background: var(--acc);
+    animation: blink 1.1s steps(1) infinite;
+  }
+
+  @keyframes blink {
+    50% {
+      opacity: 0;
+    }
+  }
+
+  /* Narrow screens: the flow reads top to bottom, the rail runs down the left side. */
+  @media (max-width: 47.99rem) {
+    .map__body {
+      padding-left: var(--space-5);
+    }
+
+    .map__steps {
+      grid-template-columns: 1fr;
+    }
+
+    .map__step {
+      grid-template-columns: 1fr auto;
+      grid-template-rows: auto auto;
+      column-gap: var(--space-4);
+      row-gap: var(--space-1);
+      padding: var(--space-3) var(--space-3);
+      border-left: 0;
+      border-top: 1px solid var(--line);
+    }
+
+    .map__step:first-child {
+      border-top-color: transparent;
+    }
+
+    .map__code {
+      grid-column: 1;
+    }
+
+    .map__title {
+      grid-column: 1;
+      font-size: var(--step-0);
+    }
+
+    .map__tech {
+      grid-column: 2;
+      grid-row: 1 / span 2;
+      align-self: center;
+    }
+
+    .map__rail {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0.3rem;
+      width: 1px;
+      height: auto;
+    }
+
+    .map__fill {
+      width: 1px;
+      height: calc((var(--i) + 0.5) * 100% / var(--cols));
+      transition: height 0.9s var(--ease-out);
+    }
+
+    .map__dot {
+      left: 0;
+      top: calc((var(--i) + 0.5) * 100% / var(--cols));
+      transition: top 0.9s var(--ease-out);
+    }
+
+    .map__log {
+      gap: var(--space-3);
+    }
+
+    .map__time {
+      display: none;
+    }
+
+    .map__line {
+      white-space: normal;
+    }
+
+    .map__caret {
+      display: none;
+    }
+  }
+</style>

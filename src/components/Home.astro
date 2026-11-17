@@ -1,11 +1,15 @@
 ---
-// Plain semantic rendering of the content. Visual design comes in later tasks.
+// Page body. Nav and hero are designed; the other sections are plain until later tasks style them.
 import { SITE } from '../config';
 import { getContent, type Metric } from '../content';
 import type { Locale } from '../i18n/locales';
 import { emailHref, whatsappUrl } from '../lib/contact';
 import { formatNumber } from '../lib/format';
-import LangSwitch from './LangSwitch.astro';
+import { Picture } from 'astro:assets';
+import portrait from '../assets/photo/leonardo-portrait.jpg';
+import Hero from './Hero.astro';
+import Marquee from './Marquee.astro';
+import Nav from './Nav.astro';
 
 interface Props {
   locale: Locale;
@@ -18,29 +22,24 @@ const mailHref = emailHref(SITE.email);
 const metricText = (m: Metric) => `${m.prefix ?? ''}${formatNumber(m.value, locale)}${m.suffix ?? ''}`;
 ---
 
-<header>
-  <a href="#hero">{SITE.name}</a>
-  <nav>
-    <a href="#pains">{c.nav.pains}</a>
-    <a href="#work">{c.nav.work}</a>
-    <a href="#try">{c.nav.tryIt}</a>
-    <a href="#method">{c.nav.method}</a>
-    <a href="#contact">{c.nav.contact}</a>
-  </nav>
-  <LangSwitch locale={locale} />
-</header>
+<Nav locale={locale} />
 
 <main>
-  <section id="hero">
-    <p>{c.hero.tag}</p>
-    <h1>{c.hero.headline.join(' ')} <em>{c.hero.accent}</em></h1>
-    <p>{c.hero.lead}</p>
-    <p>
-      <a href={waHref} target="_blank" rel="noopener">{c.hero.ctaPrimary}</a>
-      <a href="#work">{c.hero.ctaSecondary}</a>
-    </p>
-    <ol>{c.hero.mapLog.map((line) => <li>{line}</li>)}</ol>
-    <ul>{c.stack.map((s) => <li>{s}</li>)}</ul>
+  <Hero locale={locale} />
+  <Marquee items={c.stack} label="Stack" />
+
+  {/* TEMPORARY photo preview for the visual review; the photo moves to #about in Task 4. */}
+  <section id="photo-preview" class="photo-preview" data-temp-preview>
+    <figure class="portrait">
+      <Picture
+        src={portrait}
+        alt={c.about.photoAlt}
+        formats={['avif', 'webp']}
+        widths={[240, 384]}
+        sizes="(min-width: 48rem) 240px, 60vw"
+      />
+    </figure>
+    <p>{c.about.text}</p>
   </section>
 
   <section id="pains">
@@ -153,3 +152,47 @@ const metricText = (m: Metric) => `${m.prefix ?? ''}${formatNumber(m.value, loca
 <footer>
   <p>{SITE.name} · {SITE.city} · {c.footer.note}</p>
 </footer>
+
+<style>
+  /* Temporary block (see above). */
+  .photo-preview {
+    display: grid;
+    grid-template-columns: minmax(0, 15rem) minmax(0, 36rem);
+    gap: var(--space-6);
+    align-items: end;
+  }
+
+  .photo-preview p {
+    color: var(--mute);
+  }
+
+  /* Photo treatment: quieter colour (the sky stops shouting) and a faint forest cast. */
+  .portrait {
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--radius-lg);
+    background: var(--card);
+  }
+
+  .portrait :global(img) {
+    width: 100%;
+    height: auto;
+    filter: saturate(0.6) sepia(0.16) contrast(1.03);
+  }
+
+  .portrait::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--acc);
+    mix-blend-mode: color;
+    opacity: 0.18;
+    pointer-events: none;
+  }
+
+  @media (max-width: 47.99rem) {
+    .photo-preview {
+      grid-template-columns: minmax(0, 15rem);
+    }
+  }
+</style>
