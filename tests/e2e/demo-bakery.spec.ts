@@ -98,7 +98,8 @@ for (const locale of LOCALES) {
 
   test(`loading the page does not jump down to the demos (${locale})`, async ({ page }) => {
     await page.goto(`/${locale}/`);
-    await expect(page.locator('#demo-bakery [data-bk="go"]')).toBeVisible();
+    // whichever demo is the first tab has been built
+    await expect(page.locator('#try [role="tabpanel"]:not([hidden]) [data-demo-root] > *').first()).toBeAttached();
     await page.waitForTimeout(500);
     expect(await page.evaluate(() => window.scrollY)).toBe(0);
   });
