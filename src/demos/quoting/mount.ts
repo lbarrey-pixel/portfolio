@@ -42,8 +42,11 @@ export const mount: DemoMount = (root, locale: Locale) => {
     </div>`;
 
   function render(): void {
+    // Rebuilding the screen replaces the margin field: keep the cursor in it if it was there.
+    const editing = document.activeElement === $('margin');
     if (s.step === 1) renderEmail();
     else renderReview();
+    if (editing) $('margin')?.focus();
   }
 
   function renderEmail(): void {
@@ -103,7 +106,7 @@ export const mount: DemoMount = (root, locale: Locale) => {
                   <td>${i.supplier >= 0 ? esc(t.suppliers[i.supplier] ?? '–') : '–'}</td>
                   <td class="n">${i.q}</td>
                   <td class="n">${i.cost ? brl(i.cost) : '–'}</td>
-                  <td class="n">${i.cost ? brl(priceWithMargin(i.cost, s.margin)) : '–'}</td>
+                  <td class="n" data-qt="price">${i.cost ? brl(priceWithMargin(i.cost, s.margin)) : '–'}</td>
                 </tr>`,
                 )
                 .join('')}
@@ -129,10 +132,25 @@ export const mount: DemoMount = (root, locale: Locale) => {
       </div>`;
     s.items.forEach((i) => (i.fresh = false));
 
+    // Typing updates the numbers in place. Nothing is rebuilt, so the field keeps the cursor
+    // and a click on Export right after typing still lands on the button.
     const margin = $<HTMLInputElement>('margin')!;
+    margin.addEventListener('input', () => {
+      s.margin = Math.round(clampMargin(margin.value) * 100) / 100;
+      const now = proposalTotals(s.items, s.margin);
+      $('cost')!.textContent = brl(now.cost);
+      $('total')!.textContent = brl(now.total);
+      $('profit')!.textContent = brl(now.profit);
+      root.querySelectorAll<HTMLElement>('[data-qt="price"]').forEach((cell, i) => {
+        const cost = s.items[i].cost;
+        cell.textContent = cost ? brl(priceWithMargin(cost, s.margin)) : '–';
+      });
+      const csv = $('csv');
+      if (csv) csv.textContent = exportCsv(PROPOSAL_NO, s.items, s.margin);
+    });
+    // Leaving the field shows the margin actually in use (empty → 0, 999 → 200).
     margin.addEventListener('change', () => {
-      s.margin = clampMargin(margin.value);
-      render();
+      margin.value = String(s.margin);
     });
     $('export')!.addEventListener('click', () => {
       if (!priced()) return;
