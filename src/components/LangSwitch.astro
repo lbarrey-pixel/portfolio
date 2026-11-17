@@ -1,0 +1,27 @@
+---
+import { getContent } from '../content';
+import { localePath, otherLocale, type Locale } from '../i18n/locales';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const target = otherLocale(locale);
+const targetLang = target === 'pt-br' ? 'pt-BR' : 'en';
+const { nav } = getContent(locale);
+---
+
+<a
+  href={localePath(target)}
+  hreflang={targetLang}
+  lang={targetLang}
+  aria-label={nav.switchLabel}
+  data-lang-switch
+  data-locale={target}
+>{target === 'pt-br' ? 'PT' : 'EN'}</a>
+
+<script>
+  import { initLangSwitch } from '../scripts/lang-switch';
+  initLangSwitch();
+</script>

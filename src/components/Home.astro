@@ -1,0 +1,155 @@
+---
+// Plain semantic rendering of the content. Visual design comes in later tasks.
+import { SITE } from '../config';
+import { getContent, type Metric } from '../content';
+import type { Locale } from '../i18n/locales';
+import { emailHref, whatsappUrl } from '../lib/contact';
+import { formatNumber } from '../lib/format';
+import LangSwitch from './LangSwitch.astro';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const c = getContent(locale);
+const waHref = whatsappUrl(SITE.phoneE164, c.contact.whatsappMessage);
+const mailHref = emailHref(SITE.email);
+const metricText = (m: Metric) => `${m.prefix ?? ''}${formatNumber(m.value, locale)}${m.suffix ?? ''}`;
+---
+
+<header>
+  <a href="#hero">{SITE.name}</a>
+  <nav>
+    <a href="#pains">{c.nav.pains}</a>
+    <a href="#work">{c.nav.work}</a>
+    <a href="#try">{c.nav.tryIt}</a>
+    <a href="#method">{c.nav.method}</a>
+    <a href="#contact">{c.nav.contact}</a>
+  </nav>
+  <LangSwitch locale={locale} />
+</header>
+
+<main>
+  <section id="hero">
+    <p>{c.hero.tag}</p>
+    <h1>{c.hero.headline.join(' ')} <em>{c.hero.accent}</em></h1>
+    <p>{c.hero.lead}</p>
+    <p>
+      <a href={waHref} target="_blank" rel="noopener">{c.hero.ctaPrimary}</a>
+      <a href="#work">{c.hero.ctaSecondary}</a>
+    </p>
+    <ol>{c.hero.mapLog.map((line) => <li>{line}</li>)}</ol>
+    <ul>{c.stack.map((s) => <li>{s}</li>)}</ul>
+  </section>
+
+  <section id="pains">
+    <p>{c.pains.eyebrow}</p>
+    <h2>{c.pains.title}</h2>
+    <p>{c.pains.lead}</p>
+    {
+      c.pains.items.map((p) => (
+        <article>
+          <h3>{p.title}</h3>
+          <p>{p.problem}</p>
+          <p>
+            <strong>{p.answerLabel}:</strong> {p.answer}
+          </p>
+          {p.demo && <a href={`#demo-${p.demo}`}>{p.linkLabel} →</a>}
+        </article>
+      ))
+    }
+  </section>
+
+  <section id="work">
+    <p>{c.work.eyebrow}</p>
+    <h2>{c.work.title}</h2>
+    <p>{c.work.lead}</p>
+    {
+      c.work.projects.map((p) => (
+        <article id={`project-${p.id}`}>
+          <p>{p.kind}</p>
+          <h3>{p.title}</h3>
+          <p>{p.summary}</p>
+          <ol>
+            {p.steps.map((s) => (
+              <li>
+                {s.code} {s.title} ({s.tech})
+              </li>
+            ))}
+          </ol>
+          <ul>
+            {p.bullets.map((b) => (
+              <li>
+                <strong>{b.label}:</strong> {b.text}
+              </li>
+            ))}
+          </ul>
+          <dl>
+            {p.metrics.map((m) => (
+              <div>
+                <dt>{metricText(m)}</dt>
+                <dd>{m.label}</dd>
+              </div>
+            ))}
+          </dl>
+          <ul>{p.tags.map((t) => <li>{t}</li>)}</ul>
+          <p>{p.status}</p>
+          <a href={`#demo-${p.id}`}>{p.tryLabel}</a>
+        </article>
+      ))
+    }
+  </section>
+
+  <section id="try">
+    <p>{c.tryIt.eyebrow}</p>
+    <h2>{c.tryIt.title}</h2>
+    <p>{c.tryIt.lead}</p>
+    {
+      c.work.projects.map((p) => (
+        <div id={`demo-${p.id}`}>
+          <h3>{p.tab}</h3>
+          <ul>{c.tryIt.hints[p.id].map((h) => <li>{h}</li>)}</ul>
+          <p>{c.tryIt.fakeNote[p.id]}</p>
+        </div>
+      ))
+    }
+  </section>
+
+  <section id="method">
+    <p>{c.method.eyebrow}</p>
+    <h2>{c.method.title}</h2>
+    <p>{c.method.lead}</p>
+    <ol>
+      {
+        c.method.steps.map((s) => (
+          <li>
+            <h3>{s.title}</h3>
+            <p>{s.text}</p>
+          </li>
+        ))
+      }
+    </ol>
+    <h3>{c.method.scenarioTitle}</h3>
+    <p>{c.method.scenarioLead}</p>
+    <pre>{c.method.scenario.map((l) => `${l.kw} ${l.text}`).join('\n')}</pre>
+  </section>
+
+  <section id="about">
+    <p>{c.about.eyebrow}</p>
+    <p>{c.about.text}</p>
+  </section>
+
+  <section id="contact">
+    <p>{c.contact.eyebrow}</p>
+    <h2>{c.contact.title}</h2>
+    <p>{c.contact.text}</p>
+    <p>{SITE.phoneDisplay}</p>
+    <a href={waHref} target="_blank" rel="noopener">{c.contact.whatsapp}</a>
+    {mailHref && <a href={mailHref}>{c.contact.email}</a>}
+  </section>
+</main>
+
+<footer>
+  <p>{SITE.name} · {SITE.city} · {c.footer.note}</p>
+</footer>
