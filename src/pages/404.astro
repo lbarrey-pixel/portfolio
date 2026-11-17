@@ -1,0 +1,124 @@
+---
+// Not found. One page for every wrong address, so it speaks both languages at once.
+// It borrows the site's "live log" motif: the request came in, and no route matched.
+import { SITE } from '../config';
+import Base from '../layouts/Base.astro';
+---
+
+<Base locale="en" title={`404 · ${SITE.name}`}>
+  <main class="lost wrap">
+    <p class="lost__log" aria-hidden="true">
+      <span>→ request received</span>
+      <span>→ looking for the page</span>
+      <span class="lost__fail">✕ no route matched · 404</span>
+    </p>
+
+    <div class="lost__cols">
+      <section lang="en">
+        <h1>This page is <span class="accent">not on the map.</span></h1>
+        <p>The link may be old, or the address may have a typo. The rest of the site is one click away.</p>
+        <a class="btn btn--primary" href="/en/">Go to the site</a>
+      </section>
+
+      <section lang="pt-BR">
+        <h1>Esta página <span class="accent">não está no mapa.</span></h1>
+        <p>O link pode ser antigo, ou o endereço pode ter um erro de digitação. O resto do site está a um clique.</p>
+        <a class="btn btn--ghost" href="/pt-br/">Ir para o site</a>
+      </section>
+    </div>
+  </main>
+</Base>
+
+<script is:inline>
+  // Put the visitor's language first when we can tell which it is.
+  try {
+    var saved = localStorage.getItem('lb-locale');
+    var pt = saved ? saved === 'pt-br' : /^pt\b/i.test(navigator.language || '');
+    if (pt) document.documentElement.classList.add('prefers-pt');
+  } catch (e) {}
+</script>
+
+<style>
+  .lost {
+    display: grid;
+    align-content: center;
+    gap: var(--space-7);
+    min-height: 100vh;
+    min-height: 100svh;
+    padding-block: var(--space-8);
+  }
+
+  .lost__log {
+    display: grid;
+    gap: var(--space-1);
+    font: 400 var(--step--1) / 1.5 var(--font-mono);
+    color: var(--mute);
+  }
+
+  .lost__log span {
+    animation: lost-in 0.6s var(--ease-out) both;
+  }
+
+  .lost__log span:nth-child(2) {
+    animation-delay: 0.45s;
+  }
+
+  .lost__log span:nth-child(3) {
+    animation-delay: 0.9s;
+  }
+
+  .lost__fail {
+    color: var(--acc);
+  }
+
+  @keyframes lost-in {
+    from {
+      opacity: 0;
+      transform: translateY(0.4rem);
+    }
+  }
+
+  .lost__cols {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-7);
+    border-top: 1px solid var(--ink);
+    padding-top: var(--space-6);
+  }
+
+  .lost__cols section {
+    display: grid;
+    gap: var(--space-4);
+    justify-items: start;
+    align-content: start;
+  }
+
+  :global(html.prefers-pt) .lost__cols section[lang='pt-BR'] {
+    order: -1;
+  }
+
+  .lost h1 {
+    font: 500 var(--step-4) / 1.02 var(--font-body);
+    letter-spacing: -0.035em;
+    text-wrap: balance;
+  }
+
+  .lost h1 .accent {
+    display: block;
+  }
+
+  .lost p {
+    max-width: 44ch;
+    color: var(--mute);
+  }
+
+  @media (max-width: 47.99rem) {
+    .lost__cols {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .lost h1 {
+      font-size: var(--step-3);
+    }
+  }
+</style>

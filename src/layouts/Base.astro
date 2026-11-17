@@ -1,16 +1,24 @@
 ---
 import { Font } from 'astro:assets';
 import '../styles/global.css';
+import { SITE } from '../config';
 import { getContent } from '../content';
 import type { Locale } from '../i18n/locales';
+import { absoluteUrl } from '../lib/site';
 
 interface Props {
   locale: Locale;
+  /** This page's own path, e.g. "/en/". Left out on pages that should not be indexed (404). */
+  path?: string;
+  /** Overrides the locale's title (used by the 404 page). */
+  title?: string;
 }
 
-const { locale } = Astro.props;
+const { locale, path, title } = Astro.props;
 const { meta } = getContent(locale);
 const htmlLang = locale === 'pt-br' ? 'pt-BR' : 'en';
+const pageTitle = title ?? meta.title;
+const url = (p: string) => absoluteUrl(p, SITE.domain);
 ---
 
 <!doctype html>
@@ -18,16 +26,38 @@ const htmlLang = locale === 'pt-br' ? 'pt-BR' : 'en';
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>{meta.title}</title>
+    <title>{pageTitle}</title>
     <meta name="description" content={meta.description} />
-    <link rel="alternate" hreflang="en" href="/en/" />
-    <link rel="alternate" hreflang="pt-BR" href="/pt-br/" />
-    <link rel="alternate" hreflang="x-default" href="/" />
+    {
+      path ? (
+        <>
+          <link rel="canonical" href={url(path)} />
+          <link rel="alternate" hreflang="en" href={url('/en/')} />
+          <link rel="alternate" hreflang="pt-BR" href={url('/pt-br/')} />
+          <link rel="alternate" hreflang="x-default" href={url('/')} />
+          <meta property="og:type" content="website" />
+          <meta property="og:site_name" content={SITE.name} />
+          <meta property="og:title" content={pageTitle} />
+          <meta property="og:description" content={meta.description} />
+          <meta property="og:url" content={url(path)} />
+          <meta property="og:locale" content={locale === 'pt-br' ? 'pt_BR' : 'en_US'} />
+          <meta property="og:locale:alternate" content={locale === 'pt-br' ? 'en_US' : 'pt_BR'} />
+          <meta property="og:image" content={url('/og.png')} />
+          <meta property="og:image:width" content="1200" />
+          <meta property="og:image:height" content="630" />
+          <meta name="twitter:card" content="summary_large_image" />
+        </>
+      ) : (
+        <meta name="robots" content="noindex" />
+      )
+    }
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
     <script is:inline>
       document.documentElement.classList.add('js');
     </script>
     <meta name="theme-color" content="#efece3" />
-    <Font cssVariable="--font-schibsted" preload={[{ weight: '400', style: 'normal' }]} />
+    <Font cssVariable="--font-schibsted" preload={[{ weight: '400', style: 'normal' }, { weight: '500', style: 'normal' }]} />
     <Font cssVariable="--font-newsreader" preload={[{ weight: '400', style: 'italic' }]} />
     <Font cssVariable="--font-spline-mono" />
   </head>

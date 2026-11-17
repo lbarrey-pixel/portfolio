@@ -154,6 +154,21 @@ const current = locale === 'en' ? 'EN' : 'PT';
     font: 400 var(--step--1) / 1 var(--font-mono);
   }
 
+  /* A tap target of 44px around the two letters, without moving anything. */
+  .lang :global(a) {
+    display: inline-grid;
+    place-items: center;
+    min-height: 2.75rem;
+    padding-inline: 0.75rem;
+    margin-inline: -0.75rem;
+  }
+
+  .lang :global(a)::after {
+    left: 0.75rem;
+    right: 0.75rem;
+    bottom: calc(50% - 0.95em);
+  }
+
   .lang__current {
     color: var(--ink);
   }

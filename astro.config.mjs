@@ -1,8 +1,15 @@
 // @ts-check
+import { fileURLToPath } from 'node:url';
 import { defineConfig, fontProviders } from 'astro/config';
+
+// Windows: when the shell's working directory has a lowercase drive letter ("c:\..."), Astro
+// builds pages without their stylesheet links. Pin the root with an uppercase drive letter.
+const root = fileURLToPath(new URL('.', import.meta.url)).replace(/^[a-z]:/, (d) => d.toUpperCase());
+if (process.platform === 'win32') process.chdir(root);
 
 // https://astro.build/config
 export default defineConfig({
+  root,
   output: 'static',
   i18n: {
     locales: ['en', 'pt-br'],
