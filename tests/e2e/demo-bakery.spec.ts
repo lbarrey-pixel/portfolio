@@ -96,6 +96,13 @@ for (const locale of LOCALES) {
     });
   });
 
+  test(`loading the page does not jump down to the demos (${locale})`, async ({ page }) => {
+    await page.goto(`/${locale}/`);
+    await expect(page.locator('#demo-bakery [data-bk="go"]')).toBeVisible();
+    await page.waitForTimeout(500);
+    expect(await page.evaluate(() => window.scrollY)).toBe(0);
+  });
+
   test(`a link to #demo-bakery opens that panel (${locale})`, async ({ page }) => {
     await page.goto(`/${locale}/#demo-bakery`);
     await expect(page.locator('#demo-bakery')).toBeVisible();

@@ -1,4 +1,5 @@
 import { FLOW_VIEW, flowYAt, stepForProgress } from '../lib/flow';
+import { revealTab } from './tryit';
 
 /**
  * Work section: project tabs, and the flow that follows the scroll.
@@ -70,7 +71,7 @@ export function initFlow(section: HTMLElement): void {
       tab.setAttribute('aria-selected', String(on));
       tab.tabIndex = on ? 0 : -1;
       if (on && focus) tab.focus();
-      if (on) tab.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+      if (on) revealTab(tab);
     }
     for (const panel of panels) panel.hidden = panel.dataset.projectPanel !== id;
     for (const detail of details) detail.hidden = detail.dataset.projectDetail !== id;

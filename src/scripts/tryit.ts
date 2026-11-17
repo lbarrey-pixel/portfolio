@@ -23,7 +23,7 @@ export function initTryIt(section: HTMLElement, mounts: Partial<Record<DemoId, D
       tab.setAttribute('aria-selected', String(on));
       tab.tabIndex = on ? 0 : -1;
       if (on && focus) tab.focus();
-      if (on) tab.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+      if (on) revealTab(tab);
     }
     for (const panel of panels) panel.hidden = panel.dataset.demoPanel !== id;
     if (!handles[id]) {
@@ -71,4 +71,13 @@ export function initTryIt(section: HTMLElement, mounts: Partial<Record<DemoId, D
   const first = tabs.find((t) => t.getAttribute('aria-selected') === 'true') ?? tabs[0];
   if (idFromHash(location.hash)) openFromHash();
   else if (first) open(first.dataset.demoTab as DemoId);
+}
+
+/** Bring a tab into view inside its own (sideways-scrolling) tab list, without moving the page. */
+export function revealTab(tab: HTMLElement): void {
+  const list = tab.parentElement;
+  if (!list) return;
+  const left = tab.offsetLeft - list.offsetLeft;
+  if (left < list.scrollLeft) list.scrollLeft = left;
+  else if (left + tab.offsetWidth > list.scrollLeft + list.clientWidth) list.scrollLeft = left + tab.offsetWidth - list.clientWidth;
 }
