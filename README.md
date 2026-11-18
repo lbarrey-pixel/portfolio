@@ -48,8 +48,9 @@ EN/PT switch in the menu remembers the choice.
 
 Two values in `src/config.ts` turn things on:
 
-- `domain: 'example.com'` makes the canonical, language-alternate and social-image addresses
-  absolute (`https://example.com/...`). Until then they are relative paths.
+- `domain` is the address used in the canonical, language-alternate and social-image links.
+  It is `leonardobarrey.pages.dev` for now (the free Cloudflare address); change it to the real
+  domain, e.g. `'example.com'`, after adding that domain to the Cloudflare Pages project.
 - `email: 'name@example.com'` shows the "Send an email" button in the Contact section. While it is
   `null` there is no email anywhere on the site.
 
@@ -64,12 +65,13 @@ node scripts/og.mjs                  # in another terminal
 
 ## Deploy
 
-The site is meant for Cloudflare Pages, deployed from this GitHub repository on every push:
+Live at https://leonardobarrey.pages.dev. Cloudflare Pages (project `leonardobarrey`) rebuilds and
+publishes the site on every push to `main` of `lbarrey-pixel/portfolio`:
 
 - Framework preset: Astro
 - Build command: `npm run build`
 - Output directory: `dist`
-- Environment variable: `NODE_VERSION=22` (or newer)
+- Node version: taken from the `.node-version` file (24)
 
 Cloudflare serves `dist/404.html` for unknown addresses. The fonts are downloaded at build time,
 so the build needs network access.
