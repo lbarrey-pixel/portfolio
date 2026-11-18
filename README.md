@@ -42,7 +42,9 @@ The browser tests use port 4321, so stop `npm run dev` / `npm run preview` befor
 | `docs/` | Design spec, implementation plan, and the English copy for review |
 
 Languages: `/en/` and `/pt-br/`. The root `/` sends visitors to their browser's language, and the
-EN/PT switch in the menu remembers the choice.
+EN/PT switch in the menu remembers the choice. On Cloudflare that redirect happens on the server
+(`functions/index.ts`, limited to `/` by `public/_routes.json`); in `npm run dev` / `preview` the
+static `src/pages/index.astro` does it in the browser.
 
 ## When the domain exists
 

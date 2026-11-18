@@ -195,7 +195,7 @@ Generated from `src/content/en.ts`. Edit freely (inline is fine) and send it bac
 ### Quoting desk
 
 - → Click Process email and watch the AI read the order
-- → Change the margin and watch the total update
+- → Change the markup and watch the total update
 - → Export to see the file that goes to the ERP
 - *Items, suppliers and prices are fictitious.*
 

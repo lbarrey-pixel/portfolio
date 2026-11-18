@@ -1,8 +1,8 @@
 ---
-// Contact: the big moving line in both languages, a short invitation, one main action (WhatsApp).
+// Contact: the big moving line, a short invitation, one main action (WhatsApp).
 import { SITE } from '../config';
 import { getContent } from '../content';
-import { otherLocale, type Locale } from '../i18n/locales';
+import type { Locale } from '../i18n/locales';
 import { emailHref, whatsappUrl } from '../lib/contact';
 import Marquee from './Marquee.astro';
 
@@ -12,21 +12,13 @@ interface Props {
 
 const { locale } = Astro.props;
 const c = getContent(locale);
-const other = otherLocale(locale);
-const otherLang = other === 'pt-br' ? 'pt-BR' : 'en';
-const otherLines = getContent(other).contact.marquee;
-// Interleave the two languages: "Let's build it · Vamos construir · ..."
-const lines = c.contact.marquee.flatMap((text, i) => [
-  { text },
-  ...(otherLines[i] ? [{ text: otherLines[i], lang: otherLang }] : []),
-]);
 const waHref = whatsappUrl(SITE.phoneE164, c.contact.whatsappMessage);
 // The email button turns on by itself the day SITE.email is set.
 const mailHref = emailHref(SITE.email);
 ---
 
 <section id="contact" class="section contact">
-  <Marquee items={lines} label={c.contact.eyebrow} size="lg" repeat={2} />
+  <Marquee items={c.contact.marquee} label={c.contact.eyebrow} size="lg" repeat={4} />
 
   <div class="wrap contact__inner">
     <div class="contact__copy">

@@ -310,7 +310,7 @@ const ptBr: SiteContent = {
     hints: {
       quoting: [
         'Clique em Processar e-mail e veja a IA ler o pedido',
-        'Mude a margem e acompanhe o total',
+        'Mude o markup e acompanhe o total',
         'Exporte para ver o arquivo que vai para o ERP',
       ],
       bakery: [

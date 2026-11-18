@@ -284,6 +284,19 @@ const demos = c.work.projects;
     }
   }
 
+  @media (max-width: 39.99rem) {
+    /* All four tabs stay on screen: they wrap instead of scrolling out of sight. */
+    .try__tabs {
+      flex-wrap: wrap;
+      row-gap: 0;
+      overflow: visible;
+    }
+
+    .try__tab {
+      min-height: 2.75rem;
+    }
+  }
+
   @media (max-width: 47.99rem) {
     .demo {
       padding-top: var(--space-6);

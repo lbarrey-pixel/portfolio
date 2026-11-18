@@ -310,7 +310,7 @@ const en: SiteContent = {
     hints: {
       quoting: [
         'Click Process email and watch the AI read the order',
-        'Change the margin and watch the total update',
+        'Change the markup and watch the total update',
         'Export to see the file that goes to the ERP',
       ],
       bakery: [

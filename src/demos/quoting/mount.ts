@@ -96,17 +96,17 @@ export const mount: DemoMount = (root, locale: Locale) => {
                 .map(
                   (i) => `
                 <tr data-qt="row" class="${i.fresh ? 'qt-new' : ''}">
-                  <td lang="pt-BR">${esc(i.asked)}</td>
-                  <td>${
+                  <td lang="pt-BR" data-label="${esc(cols.asked)}">${esc(i.asked)}</td>
+                  <td data-label="${esc(cols.found)}">${
                     i.match !== null
                       ? `<b lang="pt-BR">${esc(i.match)}</b><div class="qt-sub">${esc(i.byAgent ? t.byAgent : i.code)}</div>`
                       : `<span class="qt-sub" data-qt="searching"><span class="qt-spin" aria-hidden="true"></span>&nbsp; ${esc(t.searching)}</span>`
                   }</td>
-                  <td><span class="qt-conf qt-conf--${i.confidence}">${esc(t.confidence[i.confidence])}</span><div class="qt-sub">${esc(t.why[i.why] ?? '')}</div></td>
-                  <td>${i.supplier >= 0 ? esc(t.suppliers[i.supplier] ?? '–') : '–'}</td>
-                  <td class="n">${i.q}</td>
-                  <td class="n">${i.cost ? brl(i.cost) : '–'}</td>
-                  <td class="n" data-qt="price">${i.cost ? brl(priceWithMargin(i.cost, s.margin)) : '–'}</td>
+                  <td data-label="${esc(cols.confidence)}"><span class="qt-conf qt-conf--${i.confidence}">${esc(t.confidence[i.confidence])}</span><div class="qt-sub">${esc(t.why[i.why] ?? '')}</div></td>
+                  <td data-label="${esc(cols.supplier)}">${i.supplier >= 0 ? esc(t.suppliers[i.supplier] ?? '–') : '–'}</td>
+                  <td class="n" data-label="${esc(cols.qty)}">${i.q}</td>
+                  <td class="n" data-label="${esc(cols.cost)}">${i.cost ? brl(i.cost) : '–'}</td>
+                  <td class="n" data-qt="price" data-label="${esc(cols.price)}">${i.cost ? brl(priceWithMargin(i.cost, s.margin)) : '–'}</td>
                 </tr>`,
                 )
                 .join('')}

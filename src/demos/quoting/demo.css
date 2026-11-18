@@ -56,7 +56,7 @@
 }
 
 .demo-quoting .qt-step {
-  font: 500 11px/1.2 var(--font-mono);
+  font: 500 12px/1.2 var(--font-mono);
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: #5b6b86;
@@ -126,7 +126,7 @@
   border-bottom: 1px solid #dde3ec;
   background: #f8fafc;
   color: #5b6b86;
-  font: 600 11px/1.2 var(--font-mono);
+  font: 600 12px/1.2 var(--font-mono);
   letter-spacing: 0.06em;
   text-align: left;
   text-transform: uppercase;
@@ -153,7 +153,7 @@
   display: inline-block;
   padding: 4px 7px;
   border-radius: 999px;
-  font: 600 11px/1 var(--font-body);
+  font: 600 12px/1 var(--font-body);
   white-space: nowrap;
 }
 
@@ -255,5 +255,69 @@
 
   .demo-quoting .qt-main {
     padding: 14px;
+  }
+
+  /* Phones: each item becomes a card, so supplier, quantity, cost and price are all on screen. */
+  .demo-quoting .qt-tablewrap {
+    overflow-x: visible;
+    border: 0;
+    background: none;
+  }
+
+  .demo-quoting table {
+    display: block;
+    min-width: 0;
+  }
+
+  .demo-quoting thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+  }
+
+  .demo-quoting tbody {
+    display: grid;
+    gap: 10px;
+  }
+
+  .demo-quoting tr {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 10px 8px;
+    padding: 12px;
+    border: 1px solid #dde3ec;
+    border-radius: 10px;
+    background: #fff;
+  }
+
+  .demo-quoting td {
+    grid-column: span 3;
+    min-width: 0;
+    padding: 0;
+    border: 0;
+  }
+
+  .demo-quoting td:nth-child(1),
+  .demo-quoting td:nth-child(2) {
+    grid-column: 1 / -1;
+  }
+
+  .demo-quoting td.n {
+    grid-column: span 2;
+    font-size: 13px;
+    text-align: left;
+    white-space: normal;
+  }
+
+  .demo-quoting td::before {
+    content: attr(data-label);
+    display: block;
+    margin-bottom: 3px;
+    color: #5b6b86;
+    font: 600 12px/1.2 var(--font-mono);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
   }
 }

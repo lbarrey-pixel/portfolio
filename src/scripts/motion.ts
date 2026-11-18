@@ -32,7 +32,9 @@ function reveal(root: Document): void {
         io.unobserve(entry.target);
       }
     },
-    { rootMargin: '0px 0px -8% 0px', threshold: 0.05 },
+    // Start a little before the element reaches the screen. The tall top margin also counts
+    // everything already above the screen, so a fast scroll or a jump leaves nothing hidden behind.
+    { rootMargin: '100000px 0px 15% 0px', threshold: 0 },
   );
   root.querySelectorAll<HTMLElement>('[data-reveal]').forEach((el) => io.observe(el));
   lines.forEach((el) => io.observe(el));

@@ -11,6 +11,12 @@ export function initLangSwitch(root: ParentNode = document): void {
       } catch {
         // Storage blocked (private mode, policy): the link still works.
       }
+      try {
+        // The same choice as a cookie, so the server can redirect "/" without showing a page first.
+        document.cookie = `${STORAGE_KEY}=${target}; path=/; max-age=31536000; SameSite=Lax`;
+      } catch {
+        // Cookies blocked: the browser-side redirect on "/" still reads localStorage.
+      }
       if (location.hash) {
         event.preventDefault();
         location.assign(localePath(target, location.hash));

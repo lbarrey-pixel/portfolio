@@ -33,6 +33,10 @@ const galleries = await Promise.all(
   ),
 );
 
+// Where each thumbnail's enlarged window sits, as a vertical shift of the picture.
+// Most screens start at the top; this one has an empty band above its content.
+const FOCUS_Y: Record<string, string> = { 'cabine-2.jpg': '-22%' };
+
 const metricText = (m: Metric) => `${m.prefix ?? ''}${formatNumber(m.value, locale)}${m.suffix ?? ''}`;
 const pathD = flowPathD();
 const pct = (v: number, of: number) => `${((v / of) * 100).toFixed(2)}%`;
@@ -187,13 +191,15 @@ const pct = (v: number, of: number) => `${((v / of) * 100).toFixed(2)}%`;
                   data-alt={img.alt}
                   data-caption={img.caption}
                 >
-                  <Image
-                    src={img.src}
-                    alt={img.alt}
-                    widths={[480, 800, Math.min(img.src.width, 1200)]}
-                    sizes={galleries[i].length === 1 ? '(min-width: 64rem) 52vw, 92vw' : '(min-width: 64rem) 26vw, 46vw'}
-                    loading="lazy"
-                  />
+                  <span class="shot__crop" style={FOCUS_Y[img.file] ? `--fy:${FOCUS_Y[img.file]}` : undefined}>
+                    <Image
+                      src={img.src}
+                      alt={img.alt}
+                      widths={[640, 960, img.src.width]}
+                      sizes={galleries[i].length === 1 ? '(min-width: 64rem) 84vw, 150vw' : '(min-width: 64rem) 42vw, 75vw'}
+                      loading="lazy"
+                    />
+                  </span>
                   <span class="shot__caption">{img.caption}</span>
                 </button>
               </li>
@@ -215,8 +221,9 @@ const pct = (v: number, of: number) => `${((v / of) * 100).toFixed(2)}%`;
 
 <style>
   .work {
-    /* position: sticky needs no clipping ancestor */
-    overflow: visible;
+    /* A flow label may reach past the edge on narrow desktops: clip it sideways.
+       "clip" (unlike "hidden") makes no scroll container, so the pinned stage still sticks. */
+    overflow-x: clip;
   }
 
   /* ---------- stage ---------- */
@@ -587,19 +594,28 @@ const pct = (v: number, of: number) => `${((v / of) * 100).toFixed(2)}%`;
     cursor: zoom-in;
   }
 
-  .shot :global(img) {
-    width: 100%;
-    height: auto;
+  /* The thumbnail is a window onto the top of the screenshot at 1.6x, so its text can be read.
+     The whole screen opens in the lightbox. */
+  .shot__crop {
+    display: block;
     aspect-ratio: 16 / 10;
-    object-fit: cover;
-    object-position: top left;
+    overflow: hidden;
     border: 1px solid var(--line);
     border-radius: var(--radius-lg);
     background: var(--card);
     transition: border-color 0.4s var(--ease-out);
   }
 
-  .shot:hover :global(img) {
+  .shot__crop :global(img) {
+    position: relative;
+    left: 50%;
+    width: 160%;
+    max-width: none;
+    height: auto;
+    translate: -50% var(--fy, 0%);
+  }
+
+  .shot:hover .shot__crop {
     border-color: var(--acc);
   }
 
@@ -613,6 +629,18 @@ const pct = (v: number, of: number) => `${((v / of) * 100).toFixed(2)}%`;
   @media (max-width: 39.99rem) {
     .work__hint {
       display: none;
+    }
+
+    /* All four tabs stay on screen: they wrap instead of scrolling out of sight. */
+    .work__tabs {
+      flex-wrap: wrap;
+      column-gap: var(--space-5);
+      row-gap: 0;
+      overflow: visible;
+    }
+
+    .work__tab {
+      min-height: 2.75rem;
     }
 
     .project__metrics {
