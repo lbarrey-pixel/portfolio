@@ -51,9 +51,14 @@ test('the hire page renders for a recruiter and stays on this page', async ({ pa
     ]),
   );
 
-  // The studio pieces are on the page: the scroll flow, the demos, the scenario.
   await expect(page.locator('#work [data-flow-node]')).toHaveCount(20);
-  await expect(page.locator('#method .scenario__kw')).toHaveCount(hire.method.scenario.length);
+  await expect(page.locator('#method h2')).toHaveText('How I build');
+  await expect(page.locator('#method [data-method-step]')).toHaveCount(4);
+  await expect(page.locator('#method .scenario')).toHaveCount(0);
+  await expect(page.locator('a[href="#method"]')).toHaveCount(0);
+  await expect(page.locator('#traits')).toContainText('What it is like to work with me');
+  await expect(page.locator('#traits')).toContainText('sit on the board');
+  await expect(page.locator('#traits')).not.toContainText(/ADS|college|Systems Analysis/i);
   await expect(page.locator('#experience')).toContainText('Kist Soluções');
   await expect(page.locator('#experience')).toContainText('2013');
   await expect(page.locator('#contact')).toContainText('leonardobarrey@gmail.com');

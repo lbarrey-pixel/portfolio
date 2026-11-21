@@ -3,14 +3,25 @@
 import { getContent, type SiteContent } from '../content';
 import type { Locale } from '../i18n/locales';
 
+type MethodCopy = {
+  eyebrow: string;
+  title: string;
+  lead: string;
+  steps: { title: string; text: string }[];
+  scenarioTitle?: string;
+  scenarioLead?: string;
+  scenario?: SiteContent['method']['scenario'];
+};
+
 interface Props {
   locale: Locale;
   /** Replaces the locale's method copy. Omitted on the sales pages. */
-  method?: SiteContent['method'];
+  method?: MethodCopy;
 }
 
 const { locale, method: methodOverride } = Astro.props;
 const method = methodOverride ?? getContent(locale).method;
+const scenario = method.scenario ?? [];
 const code = (i: number) => String(i + 1).padStart(2, '0');
 ---
 
@@ -22,7 +33,7 @@ const code = (i: number) => String(i + 1).padStart(2, '0');
       <p class="section__lead" data-reveal>{method.lead}</p>
     </header>
 
-    <ol class="method__steps">
+    <ol class="method__steps" style={`--method-cols:${method.steps.length}`}>
       {
         method.steps.map((s, i) => (
           <li class="method__step" data-method-step data-reveal style={`--n:${i}`}>
@@ -36,21 +47,23 @@ const code = (i: number) => String(i + 1).padStart(2, '0');
       }
     </ol>
 
-    <div class="scenario" data-reveal>
-      <div class="scenario__intro">
-        <h3 class="scenario__title">{method.scenarioTitle}</h3>
-        <p class="scenario__lead">{method.scenarioLead}</p>
-      </div>
-      <ol class="scenario__code">
-        {
-          method.scenario.map((l) => (
-            <li data-scenario-line>
-              <span class="scenario__kw">{l.kw}</span> <span>{l.text}</span>
-            </li>
-          ))
-        }
-      </ol>
-    </div>
+    {
+      scenario.length > 0 && (
+        <div class="scenario" data-reveal>
+          <div class="scenario__intro">
+            <h3 class="scenario__title">{method.scenarioTitle}</h3>
+            <p class="scenario__lead">{method.scenarioLead}</p>
+          </div>
+          <ol class="scenario__code">
+            {scenario.map((l) => (
+              <li data-scenario-line>
+                <span class="scenario__kw">{l.kw}</span> <span>{l.text}</span>
+              </li>
+            ))}
+          </ol>
+        </div>
+      )
+    }
   </div>
 </section>
 
@@ -58,7 +71,7 @@ const code = (i: number) => String(i + 1).padStart(2, '0');
   /* Same construction as the hero map: one ink rule on top, hairlines between the steps. */
   .method__steps {
     display: grid;
-    grid-template-columns: repeat(5, minmax(0, 1fr));
+    grid-template-columns: repeat(var(--method-cols, 5), minmax(0, 1fr));
     margin: 0;
     padding: 0;
     list-style: none;

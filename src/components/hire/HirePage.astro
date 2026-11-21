@@ -10,6 +10,7 @@ import Work from '../Work.astro';
 import HireContact from './HireContact.astro';
 import HireExperience from './HireExperience.astro';
 import HireHero from './HireHero.astro';
+import HireTraits from './HireTraits.astro';
 ---
 
 <main data-page="hire">
@@ -18,6 +19,7 @@ import HireHero from './HireHero.astro';
   <Work locale="en" work={hire.work} />
   <TryIt locale="en" projects={hire.work.projects} tryIt={hire.tryIt} />
   <Method locale="en" method={hire.method} />
+  <HireTraits />
   <HireExperience />
   <HireContact />
 </main>

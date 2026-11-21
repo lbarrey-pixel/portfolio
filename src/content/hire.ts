@@ -168,34 +168,51 @@ const hire = {
   },
 
   method: {
-    eyebrow: 'How I work',
-    title: 'A scenario is approved before it is built',
-    lead: 'The same sequence each time: a written behavior, a test that locks it, a record of the decision, and CI. AI coding tools are in that sequence. They are not a way around it.',
+    eyebrow: 'Method',
+    title: 'How I build',
+    lead: 'Clear acceptance criteria, testing, documentation and AI-assisted development. I own delivery from requirements to production.',
     steps: [
       {
-        title: 'Written scenarios',
-        text: 'Each behavior is written as an acceptance scenario, using the operation\'s own data, and approved before implementation.',
+        title: 'Acceptance criteria',
+        text: 'Clear acceptance criteria and scenarios.',
       },
       {
-        title: 'Tests from the scenarios',
-        text: 'Every approved scenario becomes an automated test. Nothing ships until that suite passes.',
+        title: 'AI-assisted development',
+        text: 'Across design, build and review.',
       },
       {
-        title: 'ADRs',
-        text: 'Decisions that are expensive to reverse are written down in the repository: matching before the model, stock as a ledger, n8n as a task list, access rules in the database.',
+        title: 'Testing and documentation',
+        text: 'Tests, documentation and a security review before production.',
       },
       {
-        title: 'GitHub Actions',
-        text: 'Lint and tests run on GitHub Actions. On the Python services, pytest runs against PostgreSQL.',
-      },
-      {
-        title: 'AI tools, behind the gate',
-        text: 'I use AI coding tools from the spec through the change, including the agent that turns an owner\'s ticket into a tested deploy. A change is done when the tests pass, and when access rules, hashed credentials and payment checks have been reviewed against the tests that lock them.',
+        title: 'End-to-end delivery',
+        text: 'I own delivery from requirements to production.',
       },
     ],
-    scenarioTitle: en.method.scenarioTitle,
-    scenarioLead: en.method.scenarioLead,
-    scenario: en.method.scenario.map((line) => ({ ...line })),
+  },
+
+  traits: {
+    eyebrow: 'With people',
+    title: 'What it is like to work with me',
+    lead: 'The traits come from the work, not from a list of adjectives.',
+    items: [
+      {
+        title: 'Pragmatic',
+        text: 'The business problem that is actually there, not the shiny one. I turn it into a spec and acceptance criteria, then ship, and I can say it plainly to people who are not engineers.',
+      },
+      {
+        title: 'Owner',
+        text: 'I co-founded a B2B technology company in 2013 and ran it. The operation is automated now, so it does not need me day to day. I sit on the board.',
+      },
+      {
+        title: 'Steady',
+        text: 'The calm comes from having run that company. I stay steady when the pressure is on.',
+      },
+      {
+        title: 'On my own',
+        text: 'I own delivery from requirements to production. Remote, async, UTC−3. I keep picking up new tools as the work asks for them.',
+      },
+    ],
   },
 
   experience: {

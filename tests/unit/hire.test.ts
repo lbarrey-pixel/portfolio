@@ -60,14 +60,40 @@ describe('hire content', () => {
     expect(values('crm')).toEqual([347, 16]);
   });
 
-  it('reuses the approved scenario and the five-step flows', () => {
-    expect(hire.method.scenario).toEqual(en.method.scenario);
-    expect(hire.method.steps).toHaveLength(5);
+  it('keeps the five-step flows and a recruiter-facing build section', () => {
+    expect(hire.method.title).toBe('How I build');
+    expect(hire.method.steps).toHaveLength(4);
+    expect(hire.method).not.toHaveProperty('scenario');
+    const methodText = [hire.method.eyebrow, hire.method.title, hire.method.lead, ...hire.method.steps.flatMap((s) => [s.title, s.text])].join('\n');
+    expect(methodText).toMatch(/acceptance criteria/i);
+    expect(methodText).toMatch(/scenarios/i);
+    expect(methodText).toMatch(/AI-assisted development/);
+    expect(methodText).toMatch(/documentation/i);
+    expect(methodText).toMatch(/from requirements to production/i);
+    expect(methodText).not.toMatch(/your business|we deliver|pricing|discovery|whatsapp|owner/i);
+    expect(methodText).not.toMatch(/\d|GitHub Actions|pytest|FastAPI|n8n|PostgreSQL/);
     for (const project of hire.work.projects) {
       const source = en.work.projects.find((p) => p.id === project.id)!;
       expect(project.steps).toEqual(source.steps);
       expect(project.images).toEqual(source.images);
     }
+  });
+
+  it('states the soft skills from the track record, without studies', () => {
+    const traitsText = [hire.traits.eyebrow, hire.traits.title, hire.traits.lead, ...hire.traits.items.flatMap((item) => [item.title, item.text])].join('\n');
+    expect(traitsText).toMatch(/real business problem|actually there/i);
+    expect(traitsText).toMatch(/spec and acceptance criteria/i);
+    expect(traitsText).toMatch(/not engineers/i);
+    expect(traitsText).toMatch(/co-founded a B2B/i);
+    expect(traitsText).toMatch(/2013/);
+    expect(traitsText).toMatch(/board/i);
+    expect(traitsText).toMatch(/day to day/i);
+    expect(traitsText).toMatch(/steady/i);
+    expect(traitsText).toMatch(/from requirements to production/i);
+    expect(traitsText).toMatch(/async/i);
+    expect(traitsText).toMatch(/new tools/i);
+    expect(traitsText).not.toMatch(/ADS|college|universit|studying|Systems Analysis/i);
+    expect(traitsText).not.toMatch(/your business|we deliver|pricing|discovery|whatsapp/i);
   });
 
   it('names the case studies in the sales-page order', () => {
