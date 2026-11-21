@@ -1,0 +1,84 @@
+---
+// Soft skills, in the same quiet grid as the method steps, without numbering them as a procedure.
+import hire from '../../content/hire';
+
+const { traits } = hire;
+---
+
+<section id="traits" class="section traits">
+  <div class="wrap">
+    <header class="section__head">
+      <p class="section__tag">{traits.eyebrow}</p>
+      <h2 class="section__title" data-reveal-lines>{traits.title}</h2>
+      <p class="section__lead" data-reveal>{traits.lead}</p>
+    </header>
+
+    <ul class="traits__list">
+      {
+        traits.items.map((item, i) => (
+          <li data-reveal style={`--n:${i}`}>
+            <h3>{item.title}</h3>
+            <p>{item.text}</p>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .traits {
+    border-top: 1px solid var(--line);
+    padding-top: var(--space-8);
+  }
+
+  .traits__list {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid var(--ink);
+  }
+
+  .traits__list li {
+    display: grid;
+    align-content: start;
+    gap: var(--space-3);
+    padding: var(--space-5) var(--space-6) var(--space-6);
+    border-bottom: 1px solid var(--line);
+    border-right: 1px solid var(--line);
+  }
+
+  .traits__list li:nth-child(3n) {
+    border-right: 0;
+    padding-right: 0;
+  }
+
+  .traits__list li:nth-child(3n + 1) {
+    padding-left: 0;
+  }
+
+  .traits__list h3 {
+    font: italic 400 var(--step-2) / 1.1 var(--font-display);
+    letter-spacing: -0.02em;
+    color: var(--acc);
+  }
+
+  .traits__list p {
+    color: var(--mute);
+  }
+
+  @media (max-width: 63.99rem) {
+    .traits__list {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .traits__list li,
+    .traits__list li:nth-child(3n),
+    .traits__list li:nth-child(3n + 1) {
+      padding: var(--space-5) 0;
+      border-right: 0;
+    }
+  }
+</style>

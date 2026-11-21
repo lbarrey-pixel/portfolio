@@ -1,0 +1,219 @@
+---
+// Same hero as the sales pages: staircase headline, live system map, two-voice type.
+// The actions are GitHub, LinkedIn and email. Nothing here links into the rest of the site.
+import hire from '../../content/hire';
+import HeroMap from '../HeroMap.astro';
+
+const { hero } = hire;
+---
+
+<section id="hero" class="hero">
+  <div class="wrap hero__inner">
+    <p class="hero__tag">{hero.tag}</p>
+
+    <h1 class="hero__title">
+      <span class="hero__line" style="--n:0">
+        <span>{hero.headline}</span>
+      </span>
+      <span class="hero__line hero__line--accent" style="--n:1">
+        <span class="accent">{hero.accent}</span>
+      </span>
+    </h1>
+
+    <div class="hero__aside">
+      <span class="hero__cue" aria-hidden="true"></span>
+      <p class="hero__lead">{hero.lead}</p>
+      <div class="hero__ctas">
+        {
+          hero.ctas.map((cta, i) => (
+            <a
+              class:list={['btn', i === 0 ? 'btn--primary' : 'btn--ghost']}
+              href={cta.href}
+              {...(cta.href.startsWith('mailto:') || cta.href.startsWith('/')
+                ? {}
+                : { target: '_blank', rel: 'noopener noreferrer' })}
+              data-magnetic
+            >
+              {cta.label}
+            </a>
+          ))
+        }
+      </div>
+    </div>
+
+    <div class="hero__map">
+      <HeroMap caption={hero.mapCaption} steps={hero.mapSteps} log={hero.mapLog} />
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    padding-block: clamp(var(--space-6), 6vh, var(--space-8)) var(--space-7);
+  }
+
+  .hero__inner {
+    --gap: var(--space-5);
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: var(--gap);
+  }
+
+  .hero__tag {
+    grid-column: 1 / -1;
+    font: 400 var(--step--1) / 1.4 var(--font-mono);
+    color: var(--acc);
+    animation: fade 0.4s var(--ease-out) both;
+  }
+
+  .hero__title {
+    grid-column: 1 / -1;
+    --stair: calc((100% + var(--gap)) / 12);
+    margin-top: var(--space-4);
+    font: 500 var(--step-hero) / 0.98 var(--font-body);
+    letter-spacing: -0.04em;
+  }
+
+  .hero__line {
+    display: block;
+    overflow: hidden;
+    padding-bottom: 0.06em;
+    margin-left: calc(var(--n) * var(--stair));
+  }
+
+  .hero__line > span {
+    display: inline-block;
+    animation: rise 0.55s var(--ease-out) both;
+    animation-delay: calc(var(--n) * 0.06s);
+  }
+
+  .hero__line--accent {
+    padding-bottom: 0.12em;
+  }
+
+  .hero__line--accent .accent {
+    font-size: 1.12em;
+    line-height: 0.9;
+    letter-spacing: -0.025em;
+  }
+
+  .hero__aside {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: subgrid;
+    align-items: end;
+    margin-top: var(--space-5);
+  }
+
+  .hero__lead {
+    grid-column: 3 / span 6;
+    grid-row: 1;
+    max-width: 56ch;
+    animation: fade 0.45s var(--ease-out) 0.15s both;
+    font-size: 1.0625rem;
+    line-height: 1.6;
+    color: var(--mute);
+  }
+
+  .hero__ctas {
+    grid-column: 9 / -1;
+    grid-row: 1;
+    justify-self: end;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--space-3);
+    animation: fade 0.45s var(--ease-out) 0.2s both;
+  }
+
+  .hero__cue {
+    grid-column: 1;
+    grid-row: 1;
+    align-self: end;
+    justify-self: start;
+    position: relative;
+    width: 1px;
+    height: 3.5rem;
+    overflow: hidden;
+    background: var(--line);
+    animation: fade 0.45s var(--ease-out) 0.25s both;
+  }
+
+  .hero__cue::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: -40%;
+    width: 1px;
+    height: 40%;
+    background: var(--ink);
+    animation: cue 2s var(--ease-in-out) infinite;
+  }
+
+  .hero__map {
+    grid-column: 1 / -1;
+    margin-top: var(--space-6);
+    animation: fade 0.45s var(--ease-out) 0.25s both;
+  }
+
+  @keyframes rise {
+    from {
+      transform: translateY(105%);
+    }
+  }
+
+  @keyframes fade {
+    from {
+      opacity: 0;
+      transform: translateY(1rem);
+    }
+  }
+
+  @keyframes cue {
+    to {
+      top: 100%;
+    }
+  }
+
+  @media (max-width: 63.99rem) {
+    .hero__lead,
+    .hero__ctas {
+      grid-column: 2 / -1;
+    }
+
+    .hero__ctas {
+      grid-row: 2;
+      justify-self: start;
+      max-width: 26rem;
+      margin-top: var(--space-5);
+    }
+  }
+
+  @media (max-width: 47.99rem) {
+    .hero__title {
+      font-size: clamp(2.4rem, 0.9rem + 7.2vw, 3.4rem);
+      line-height: 1;
+    }
+
+    .hero__line {
+      margin-left: 0;
+    }
+
+    .hero__line--accent {
+      margin-left: 0;
+    }
+
+    .hero__lead,
+    .hero__ctas {
+      grid-column: 1 / -1;
+    }
+
+    .hero__cue {
+      display: none;
+    }
+
+    .hero__ctas .btn {
+      flex: 1 1 100%;
+    }
+  }
+</style>

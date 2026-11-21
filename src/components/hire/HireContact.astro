@@ -1,0 +1,101 @@
+---
+// Same contact block as the sales pages: a large moving line, then one column of actions.
+// Email, LinkedIn and GitHub only.
+import hire from '../../content/hire';
+import Marquee from '../Marquee.astro';
+
+const { contact } = hire;
+---
+
+<section id="contact" class="section contact">
+  <Marquee items={contact.marquee} label={contact.eyebrow} size="lg" repeat={4} />
+
+  <div class="wrap contact__inner">
+    <div class="contact__copy">
+      <p class="section__tag">{contact.eyebrow}</p>
+      <h2 class="contact__title" data-reveal-lines>{contact.title}</h2>
+      <p class="contact__text" data-reveal>{contact.text}</p>
+    </div>
+
+    <div class="contact__actions" data-reveal style="--n:1">
+      {
+        contact.actions.map((action) => (
+          <a
+            class:list={['btn', action.primary ? 'btn--primary' : 'btn--ghost']}
+            href={action.href}
+            {...(action.href.startsWith('mailto:') || action.href.startsWith('/')
+              ? {}
+              : { target: '_blank', rel: 'noopener noreferrer' })}
+            data-magnetic
+          >
+            {action.label}
+          </a>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .contact {
+    padding-top: 0;
+  }
+
+  .contact__inner {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: var(--space-5);
+    row-gap: var(--space-6);
+    align-items: end;
+    margin-top: var(--space-8);
+  }
+
+  .contact__copy {
+    grid-column: 1 / span 7;
+    display: grid;
+    gap: var(--space-4);
+  }
+
+  .contact__title {
+    font: 500 var(--step-4) / 1.02 var(--font-body);
+    letter-spacing: -0.035em;
+    text-wrap: balance;
+  }
+
+  .contact__text {
+    max-width: 52ch;
+    font-size: 1.0625rem;
+    line-height: 1.6;
+    color: var(--mute);
+  }
+
+  .contact__actions {
+    grid-column: 9 / -1;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--space-3);
+  }
+
+  @media (max-width: 63.99rem) {
+    .contact__copy,
+    .contact__actions {
+      grid-column: 1 / -1;
+    }
+
+    .contact__actions {
+      max-width: 26rem;
+    }
+  }
+
+  @media (max-width: 47.99rem) {
+    .contact__inner {
+      margin-top: var(--space-7);
+    }
+
+    .contact__title {
+      font-size: var(--step-3);
+      line-height: 1.05;
+    }
+  }
+</style>

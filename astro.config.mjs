@@ -11,10 +11,13 @@ if (process.platform === 'win32') process.chdir(root);
 export default defineConfig({
   root,
   output: 'static',
+  // Locales are authored by hand (src/pages/en, src/pages/pt-br, and the root
+  // redirect). `manual` keeps Astro from requiring a locale prefix on every URL,
+  // so the English-only /hire/ page is served as itself. /en/ and /pt-br/ are unchanged.
   i18n: {
     locales: ['en', 'pt-br'],
     defaultLocale: 'en',
-    routing: { prefixDefaultLocale: true, redirectToDefaultLocale: false },
+    routing: 'manual',
   },
   // Downloaded at build time and served from this site (no third-party font requests).
   fonts: [

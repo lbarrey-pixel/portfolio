@@ -3,19 +3,25 @@
 // between the four projects; below the stage, the active project's details and screenshots.
 import type { ImageMetadata } from 'astro';
 import { getImage, Image } from 'astro:assets';
-import { getContent, type Metric } from '../content';
+import { getContent, type Metric, type Project, type SiteContent } from '../content';
 import type { Locale } from '../i18n/locales';
 import { FLOW_NODES, FLOW_VIEW, flowPathD } from '../lib/flow';
 import { formatNumber } from '../lib/format';
 import Lightbox from './Lightbox.astro';
 
+/** A sales project, plus an optional public repository. The sales pages leave `repo` unset. */
+export type WorkProject = Project & { repo?: { href: string; label: string } };
+
 interface Props {
   locale: Locale;
+  /** Replaces the locale's work copy. Omitted on the sales pages, so those stay as authored. */
+  work?: Omit<SiteContent['work'], 'projects'> & { projects: WorkProject[] };
 }
 
-const { locale } = Astro.props;
+const { locale, work: workOverride } = Astro.props;
 const c = getContent(locale);
-const projects = c.work.projects;
+const work: NonNullable<Props['work']> = workOverride ?? c.work;
+const projects = work.projects;
 
 const files = import.meta.glob<{ default: ImageMetadata }>('../assets/projects/*.jpg', { eager: true });
 const source = (file: string) => files[`../assets/projects/${file}`].default;
@@ -45,9 +51,9 @@ const pct = (v: number, of: number) => `${((v / of) * 100).toFixed(2)}%`;
 <section id="work" class="section work" data-work>
   <div class="wrap">
     <header class="section__head">
-      <p class="section__tag">{c.work.eyebrow}</p>
-      <h2 class="section__title" data-reveal-lines>{c.work.title}</h2>
-      <p class="section__lead" data-reveal>{c.work.lead}</p>
+      <p class="section__tag">{work.eyebrow}</p>
+      <h2 class="section__title" data-reveal-lines>{work.title}</h2>
+      <p class="section__lead" data-reveal>{work.lead}</p>
     </header>
   </div>
 
@@ -55,7 +61,7 @@ const pct = (v: number, of: number) => `${((v / of) * 100).toFixed(2)}%`;
     <div class="work__stage" data-flow-stage>
       <div class="wrap work__stage-inner">
         <div class="work__bar">
-          <div class="work__tabs" role="tablist" aria-label={c.work.eyebrow}>
+          <div class="work__tabs" role="tablist" aria-label={work.eyebrow}>
             {
               projects.map((p, i) => (
                 <button
@@ -73,7 +79,7 @@ const pct = (v: number, of: number) => `${((v / of) * 100).toFixed(2)}%`;
               ))
             }
           </div>
-          <p class="work__hint" aria-hidden="true">{c.work.progressHint}</p>
+          <p class="work__hint" aria-hidden="true">{work.progressHint}</p>
         </div>
 
         {
@@ -175,6 +181,13 @@ const pct = (v: number, of: number) => `${((v / of) * 100).toFixed(2)}%`;
             <a class="btn btn--ghost detail__try" href={`#demo-${p.id}`} data-magnetic>
               {p.tryLabel}
             </a>
+            {
+              p.repo && (
+                <a class="btn btn--ghost" href={p.repo.href} target="_blank" rel="noopener noreferrer">
+                  {p.repo.label}
+                </a>
+              )
+            }
           </div>
 
           <ul class:list={['detail__shots', galleries[i].length === 1 && 'detail__shots--single']}>
