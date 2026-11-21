@@ -82,11 +82,28 @@ describe('sales pages do not point at /hire/', () => {
   });
 });
 
+/** Cloudflare rejects a splat that also covers a more specific rule ("/hire/*" and "/hire/"). */
+function hasOverlappingRules(routes: string[]): boolean {
+  const splats = routes.filter((route) => route.endsWith('/*'));
+  return splats.some((splat) => {
+    const prefix = splat.slice(0, -1);
+    return routes.some((route) => route !== splat && route.startsWith(prefix));
+  });
+}
+
 describe('Cloudflare routes', () => {
   const routes = JSON.parse(readFileSync(new URL('../../public/_routes.json', import.meta.url), 'utf8'));
 
-  it('runs the redirect function only on /, and keeps /hire/ static', () => {
+  it('runs the redirect function only on /, and keeps /hire/ a static file', () => {
+    expect(routes.version).toBe(1);
     expect(routes.include).toEqual(['/']);
-    expect(routes.exclude).toEqual(expect.arrayContaining(['/hire', '/hire/', '/hire/*']));
+    expect(routes.include.some((rule: string) => rule === '/*' || rule.startsWith('/hire'))).toBe(false);
+    expect(hasOverlappingRules(routes.include)).toBe(false);
+    expect(hasOverlappingRules(routes.exclude)).toBe(false);
+    expect(routes.include.length + routes.exclude.length).toBeLessThanOrEqual(100);
+    for (const rule of [...routes.include, ...routes.exclude]) {
+      expect(rule.startsWith('/')).toBe(true);
+      expect(rule.length).toBeLessThanOrEqual(100);
+    }
   });
 });
