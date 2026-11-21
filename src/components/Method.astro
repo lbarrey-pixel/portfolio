@@ -1,28 +1,30 @@
 ---
 // Method: five steps in order (a real sequence, so they are numbered), then one approved scenario.
-import { getContent } from '../content';
+import { getContent, type SiteContent } from '../content';
 import type { Locale } from '../i18n/locales';
 
 interface Props {
   locale: Locale;
+  /** Replaces the locale's method copy. Omitted on the sales pages. */
+  method?: SiteContent['method'];
 }
 
-const { locale } = Astro.props;
-const c = getContent(locale);
+const { locale, method: methodOverride } = Astro.props;
+const method = methodOverride ?? getContent(locale).method;
 const code = (i: number) => String(i + 1).padStart(2, '0');
 ---
 
 <section id="method" class="section method">
   <div class="wrap">
     <header class="section__head">
-      <p class="section__tag">{c.method.eyebrow}</p>
-      <h2 class="section__title" data-reveal-lines>{c.method.title}</h2>
-      <p class="section__lead" data-reveal>{c.method.lead}</p>
+      <p class="section__tag">{method.eyebrow}</p>
+      <h2 class="section__title" data-reveal-lines>{method.title}</h2>
+      <p class="section__lead" data-reveal>{method.lead}</p>
     </header>
 
     <ol class="method__steps">
       {
-        c.method.steps.map((s, i) => (
+        method.steps.map((s, i) => (
           <li class="method__step" data-method-step data-reveal style={`--n:${i}`}>
             <span class="method__code" aria-hidden="true">
               {code(i)}
@@ -36,12 +38,12 @@ const code = (i: number) => String(i + 1).padStart(2, '0');
 
     <div class="scenario" data-reveal>
       <div class="scenario__intro">
-        <h3 class="scenario__title">{c.method.scenarioTitle}</h3>
-        <p class="scenario__lead">{c.method.scenarioLead}</p>
+        <h3 class="scenario__title">{method.scenarioTitle}</h3>
+        <p class="scenario__lead">{method.scenarioLead}</p>
       </div>
       <ol class="scenario__code">
         {
-          c.method.scenario.map((l) => (
+          method.scenario.map((l) => (
             <li data-scenario-line>
               <span class="scenario__kw">{l.kw}</span> <span>{l.text}</span>
             </li>

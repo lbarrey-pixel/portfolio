@@ -1,0 +1,38 @@
+---
+// Recruiter page. Same sections and motion as the sales site, with no way off this page
+// except GitHub, the repositories, LinkedIn and email.
+import hire from '../../content/hire';
+import Footer from '../Footer.astro';
+import Marquee from '../Marquee.astro';
+import Method from '../Method.astro';
+import TryIt from '../TryIt.astro';
+import Work from '../Work.astro';
+import HireContact from './HireContact.astro';
+import HireExperience from './HireExperience.astro';
+import HireHero from './HireHero.astro';
+---
+
+<main data-page="hire">
+  <HireHero />
+  <Marquee items={hire.stack} label={hire.stackLabel} />
+  <Work locale="en" work={hire.work} />
+  <TryIt locale="en" projects={hire.work.projects} tryIt={hire.tryIt} />
+  <Method locale="en" method={hire.method} />
+  <HireExperience />
+  <HireContact />
+</main>
+
+<Footer locale="en" />
+
+<script>
+  import { initMotion } from '../../scripts/motion';
+
+  initMotion(document);
+</script>
+
+<style is:global>
+  /* No site nav on this page, so the pinned flow sits at the top of the viewport. */
+  :root:has(main[data-page='hire']) {
+    --nav-h: 0px;
+  }
+</style>

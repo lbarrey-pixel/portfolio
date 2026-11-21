@@ -85,4 +85,12 @@ describe('root redirect function', () => {
     expect((await call({}, 'POST')).status).toBe(200);
     expect(await (await call({}, 'GET', '/en/')).text()).toBe('static page');
   });
+
+  it('does not redirect /hire/', async () => {
+    expect((await call({}, 'GET', '/hire/')).status).toBe(200);
+    expect(await (await call({}, 'GET', '/hire/')).text()).toBe('static page');
+    expect(await (await call({ 'Accept-Language': 'pt-BR', Cookie: 'lb-locale=pt-br' }, 'GET', '/hire')).text()).toBe(
+      'static page',
+    );
+  });
 });

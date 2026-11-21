@@ -1,0 +1,9 @@
+---
+import HirePage from '../../components/hire/HirePage.astro';
+import hire from '../../content/hire';
+import Base from '../../layouts/Base.astro';
+---
+
+<Base locale="en" path="/hire/" title={hire.meta.title} description={hire.meta.description} alternates={false}>
+  <HirePage />
+</Base>

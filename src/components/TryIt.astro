@@ -5,7 +5,7 @@ import '../demos/bakery/demo.css';
 import '../demos/crm/demo.css';
 import '../demos/quoting/demo.css';
 import '../demos/warehouse/demo.css';
-import { getContent } from '../content';
+import { getContent, type Project, type SiteContent } from '../content';
 import { strings as crm } from '../demos/crm/strings';
 import { strings as quoting } from '../demos/quoting/strings';
 import type { DemoId } from '../demos/types';
@@ -14,10 +14,15 @@ import DeviceFrame from './DeviceFrame.astro';
 
 interface Props {
   locale: Locale;
+  /** Replaces the locale's project list (tab names). Omitted on the sales pages. */
+  projects?: Project[];
+  /** Replaces the locale's "Try it" copy. Omitted on the sales pages. */
+  tryIt?: SiteContent['tryIt'];
 }
 
-const { locale } = Astro.props;
+const { locale, projects: projectsOverride, tryIt: tryOverride } = Astro.props;
 const c = getContent(locale);
+const tryIt = tryOverride ?? c.tryIt;
 
 // The device each demo runs in. "wide" demos put the instructions in a row above the device;
 // the warehouse also has a second surface (the manager's dashboard) next to its phone.
@@ -27,18 +32,18 @@ const DEVICE: Record<DemoId, { variant: 'phone' | 'browser'; label?: string; wid
   crm: { variant: 'browser', label: crm[locale].frameLabel, wide: true },
   warehouse: { variant: 'phone', wide: true, aside: true },
 };
-const demos = c.work.projects;
+const demos = projectsOverride ?? c.work.projects;
 ---
 
 <section id="try" class="section try" data-try data-locale={locale}>
   <div class="wrap">
     <header class="section__head">
-      <p class="section__tag">{c.tryIt.eyebrow}</p>
-      <h2 class="section__title" data-reveal-lines>{c.tryIt.title}</h2>
-      <p class="section__lead" data-reveal>{c.tryIt.lead}</p>
+      <p class="section__tag">{tryIt.eyebrow}</p>
+      <h2 class="section__title" data-reveal-lines>{tryIt.title}</h2>
+      <p class="section__lead" data-reveal>{tryIt.lead}</p>
     </header>
 
-    <div class="try__tabs" role="tablist" aria-label={c.tryIt.eyebrow}>
+    <div class="try__tabs" role="tablist" aria-label={tryIt.eyebrow}>
       {
         demos.map((p, i) => (
           <button
@@ -72,13 +77,13 @@ const demos = c.work.projects;
             <div class="demo__side">
               <h3 class="demo__title">{p.tab}</h3>
               <ol class="demo__hints">
-                {c.tryIt.hints[p.id].map((h) => (
+                {tryIt.hints[p.id].map((h) => (
                   <li>{h}</li>
                 ))}
               </ol>
-              <p class="demo__note">{c.tryIt.fakeNote[p.id]}</p>
+              <p class="demo__note">{tryIt.fakeNote[p.id]}</p>
               <button type="button" class="btn btn--ghost demo__reset" data-demo-reset={p.id}>
-                {c.tryIt.reset}
+                {tryIt.reset}
               </button>
             </div>
             <div class:list={['demo__device', device.aside && 'demo__device--split']}>
