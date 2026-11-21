@@ -70,8 +70,28 @@ describe('hire content', () => {
     }
   });
 
-  it('names the four case studies in the sales-page order', () => {
+  it('names the case studies in the sales-page order', () => {
     expect(hire.work.projects.map((p) => p.id)).toEqual(['quoting', 'bakery', 'crm', 'warehouse']);
+  });
+
+  it('frames the work as a sample and does not count the projects', () => {
+    const shown = [
+      hire.meta.description,
+      hire.hero.lead,
+      hire.work.eyebrow,
+      hire.work.title,
+      hire.work.lead,
+      hire.tryIt.eyebrow,
+      hire.tryIt.title,
+      hire.tryIt.lead,
+      hire.contact.text,
+    ].join('\n');
+    expect(shown).toMatch(/sample|selected/i);
+    expect(shown).not.toMatch(/\bfour\b/i);
+    expect(shown).not.toMatch(/\b4\s+(systems|projects|case)/i);
+    expect(shown).not.toMatch(/\b(01|02|03|04)\b/);
+    // Flow-step codes stay. They number the steps of one system, not the list of systems.
+    expect(hire.work.projects[0].steps.map((s) => s.code)).toEqual(en.work.projects[0].steps.map((s) => s.code));
   });
 });
 

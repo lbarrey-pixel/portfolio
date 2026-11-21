@@ -44,7 +44,7 @@ const hire = {
   meta: {
     title: 'Leonardo Barrey · AI-native full-stack engineer',
     description:
-      'Full-stack engineer in Florianópolis, Brazil (UTC−3), open to remote mid-level roles in the US, Canada and Europe. Case studies and working demos of systems in production.',
+      'Full-stack engineer in Florianópolis, Brazil (UTC−3), open to remote mid-level roles in the US, Canada and Europe. Selected case studies and working demos.',
   },
 
   links: HIRE_LINKS,
@@ -68,9 +68,9 @@ const hire = {
   stack: [...en.stack],
 
   work: {
-    eyebrow: 'Case studies',
-    title: 'Systems in production',
-    lead: 'Four systems in use. The public repositories are portfolio versions: fictional brands and data, and the production code is private. The counts below are from the systems in use. Screenshots and demos on this page use fictional data.',
+    eyebrow: 'Selected recent work',
+    title: 'Some of the systems I\'ve built recently',
+    lead: 'A sample, not a full list. The public repositories are portfolio versions: fictional brands and data, and the production code is private. The counts below are from these running systems. Screenshots and demos use fictional data.',
     progressHint: en.work.progressHint,
     projects: [
       project('quoting', {
@@ -163,14 +163,14 @@ const hire = {
   tryIt: {
     ...en.tryIt,
     eyebrow: 'Demos',
-    title: 'The same systems, running in the browser',
-    lead: 'Short samples of the four case studies, on fictional data. Nothing on this page is sent anywhere. The counts in the case studies are separate from these screens.',
+    title: 'A few of them, running in the browser',
+    lead: 'Short samples of the systems above, on fictional data. Nothing on this page is sent anywhere. The counts in the case studies are separate from these screens.',
   },
 
   method: {
     eyebrow: 'How I work',
     title: 'A scenario is approved before it is built',
-    lead: 'The same sequence on every system: a written behavior, a test that locks it, a record of the decision, and CI. AI coding tools are in that sequence. They are not a way around it.',
+    lead: 'The same sequence each time: a written behavior, a test that locks it, a record of the decision, and CI. AI coding tools are in that sequence. They are not a way around it.',
     steps: [
       {
         title: 'Written scenarios',
@@ -220,7 +220,7 @@ const hire = {
   contact: {
     eyebrow: 'Contact',
     title: 'Email, LinkedIn or GitHub',
-    text: 'For a role, write to leonardobarrey@gmail.com. The repositories linked above are the portfolio versions of the systems.',
+    text: 'For a role, write to leonardobarrey@gmail.com. The repositories linked on this page are portfolio versions, with fictional data.',
     marquee: ['Remote roles', 'US · Canada · Europe', 'UTC−3'],
     actions: [
       { label: 'Email', href: `mailto:${HIRE_LINKS.email}`, primary: true },
