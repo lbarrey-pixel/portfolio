@@ -88,8 +88,9 @@ describe('hire content', () => {
     expect(traitsText).toMatch(/not engineers/i);
     expect(traitsText).toMatch(/co-founded a B2B/i);
     expect(traitsText).toMatch(/2013/);
-    expect(traitsText).toMatch(/board/i);
-    expect(traitsText).toMatch(/day to day/i);
+    expect(traitsText).toMatch(/board member/i);
+    expect(traitsText).toMatch(/not involved in day-to-day operations/i);
+    expect(traitsText).not.toMatch(/automated now|does not need me|no longer need/i);
     expect(traitsText).toMatch(/async/i);
     expect(traitsText).toMatch(/UTC−3/);
     expect(traitsText).toMatch(/new tools/i);

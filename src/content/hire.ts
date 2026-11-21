@@ -216,7 +216,7 @@ const hire = {
       },
       {
         title: 'Owner',
-        text: 'I co-founded a B2B technology company in 2013 and ran it. The operation is automated now, so it does not need me day to day. I sit on the board.',
+        text: 'I co-founded a B2B technology company in 2013 and ran it. Today I am a co-founder and board member, not involved in day-to-day operations.',
       },
       {
         title: 'On my own',
