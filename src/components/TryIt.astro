@@ -17,12 +17,13 @@ interface Props {
   /** Replaces the locale's project list (tab names). Omitted on the sales pages. */
   projects?: Project[];
   /** Replaces the locale's "Try it" copy. Omitted on the sales pages. */
-  tryIt?: SiteContent['tryIt'];
+  tryIt?: SiteContent['tryIt'] & { showNotes?: boolean };
 }
 
 const { locale, projects: projectsOverride, tryIt: tryOverride } = Astro.props;
 const c = getContent(locale);
 const tryIt = tryOverride ?? c.tryIt;
+const showNotes = (tryIt as { showNotes?: boolean }).showNotes !== false;
 
 // The device each demo runs in. "wide" demos put the instructions in a row above the device;
 // the warehouse also has a second surface (the manager's dashboard) next to its phone.
@@ -81,7 +82,7 @@ const demos = projectsOverride ?? c.work.projects;
                   <li>{h}</li>
                 ))}
               </ol>
-              <p class="demo__note">{tryIt.fakeNote[p.id]}</p>
+              {showNotes && <p class="demo__note">{tryIt.fakeNote[p.id]}</p>}
               <button type="button" class="btn btn--ghost demo__reset" data-demo-reset={p.id}>
                 {tryIt.reset}
               </button>

@@ -11,6 +11,7 @@ export const HIRE_LINKS = {
   github: 'https://github.com/lbarrey-pixel',
   linkedin: 'https://www.linkedin.com/in/leonardobarrey',
   email: 'leonardobarrey@gmail.com',
+  cv: '/Leonardo_Barrey_CV.pdf',
 } as const;
 
 const REPOS = {
@@ -23,7 +24,10 @@ const REPOS = {
 
 function project(
   id: Project['id'],
-  over: Pick<Project, 'title' | 'summary' | 'bullets' | 'tags'> & { repoLabel: string },
+  over: Pick<Project, 'title' | 'summary' | 'bullets' | 'tags'> & {
+    repoLabel: string;
+    metrics?: Project['metrics'];
+  },
 ): Project & { repo: { href: string; label: string } } {
   const base = en.work.projects.find((p) => p.id === id);
   if (!base) throw new Error(`missing project ${id}`);
@@ -33,6 +37,7 @@ function project(
     summary: over.summary,
     bullets: over.bullets,
     tags: over.tags,
+    ...(over.metrics ? { metrics: over.metrics } : {}),
     tryLabel: base.tryLabel,
     repo: { href: REPOS[id], label: over.repoLabel },
   };
@@ -53,11 +58,12 @@ const hire = {
     tag: 'Florianópolis, Brazil · UTC−3 · Open to remote roles',
     headline: 'Leonardo Barrey',
     accent: 'AI-Native Full-Stack Engineer',
-    lead: 'I build operational systems in Python, FastAPI, React, TypeScript and PostgreSQL, and I use AI coding tools with the test suite as the gate. Open to remote roles.',
+    lead: 'Co-founder and engineer with 15+ years in IT. I build operational systems in Python, FastAPI, React, TypeScript and PostgreSQL, and I use AI coding tools with the test suite as the gate. Open to remote roles.',
     ctas: [
       { label: 'GitHub', href: HIRE_LINKS.github },
       { label: 'LinkedIn', href: HIRE_LINKS.linkedin },
       { label: 'Email', href: `mailto:${HIRE_LINKS.email}` },
+      { label: 'Download CV (PDF)', href: HIRE_LINKS.cv },
     ],
     mapCaption: quoting.tab,
     mapSteps: quoting.steps,
@@ -70,7 +76,7 @@ const hire = {
   work: {
     eyebrow: 'Selected recent work',
     title: 'Some of the systems I\'ve built recently',
-    lead: 'A sample, not a full list. The public repositories are portfolio versions: fictional brands and data, and the production code is private. The counts below are from these running systems. Screenshots and demos use fictional data.',
+    lead: 'A sample, not a full list. The public repositories are portfolio versions, with fictional data, and the production code is private. The counts below are from these running systems.',
     progressHint: en.work.progressHint,
     projects: [
       project('quoting', {
@@ -101,7 +107,7 @@ const hire = {
         bullets: [
           {
             label: 'Problem',
-            text: 'The bakery sold by message, tracked stock from memory, guessed the delivery fee and gave a cut of each app order to the marketplace.',
+            text: 'The bakery sold by message, tracked stock from memory and guessed the delivery fee.',
           },
           {
             label: 'Built',
@@ -114,6 +120,7 @@ const hire = {
         ],
         tags: ['Python', 'FastAPI', 'PostgreSQL', 'React', 'PWA', 'Pix'],
         repoLabel: 'doce-pedidos',
+        metrics: en.work.projects.find((p) => p.id === 'bakery')!.metrics.filter((m) => m.value === 2),
       }),
       project('crm', {
         title: 'The agent drafts. The API decides what may be sent.',
@@ -164,7 +171,14 @@ const hire = {
     ...en.tryIt,
     eyebrow: 'Demos',
     title: 'A few of them, running in the browser',
-    lead: 'Short samples of the systems above, on fictional data. Nothing on this page is sent anywhere. The counts in the case studies are separate from these screens.',
+    lead: 'Short samples of the systems above. Nothing on this page is sent anywhere. The counts in the case studies are separate from these screens.',
+    showNotes: false,
+    fakeNote: {
+      quoting: 'Suppliers and prices in this sample.',
+      bakery: 'The Pix code charges nothing.',
+      crm: 'Companies and conversations in this sample.',
+      warehouse: 'Invoices and orders in this sample.',
+    },
   },
 
   method: {
@@ -205,12 +219,8 @@ const hire = {
         text: 'I co-founded a B2B technology company in 2013 and ran it. The operation is automated now, so it does not need me day to day. I sit on the board.',
       },
       {
-        title: 'Steady',
-        text: 'The calm comes from having run that company. I stay steady when the pressure is on.',
-      },
-      {
         title: 'On my own',
-        text: 'I own delivery from requirements to production. Remote, async, UTC−3. I keep picking up new tools as the work asks for them.',
+        text: 'Remote and async, from UTC−3. I keep picking up new tools as the work asks for them.',
       },
     ],
   },
@@ -219,12 +229,16 @@ const hire = {
     eyebrow: 'Experience',
     title: 'Kist Soluções',
     photoAlt: en.about.photoAlt,
-    text: 'Co-founder since 2013, and lead software engineer since 2023. Before 2023 the work was IT products and small Python automations on Arduino and Raspberry Pi for local ISPs. From 2008 to 2013, support and PHP roles.',
+    text: 'Co-founder since 2013, and lead software engineer since 2023. Before 2023 the work was IT products and small Python automations on Arduino and Raspberry Pi for local ISPs.',
     roles: [
       { label: 'Co-founder', detail: 'Kist Soluções · 2013 – Present' },
       { label: 'Lead software engineer', detail: 'Kist Soluções · 2023 – Present' },
       { label: 'Before 2023', detail: 'IT products and small Python automations on Arduino and Raspberry Pi for local ISPs' },
-      { label: '2008 – 2013', detail: 'Support and PHP roles' },
+      {
+        label: 'Before Kist',
+        detail:
+          'AT&IT (founder, 2012–2013), DBSeller (systems support, PHP/PostgreSQL ERP, 2011–2012), Vonpar (technical support, 2010–2011), Poliedro (PHP developer, 2008–2009).',
+      },
     ],
     also: {
       label: 'Also public',
@@ -236,11 +250,12 @@ const hire = {
 
   contact: {
     eyebrow: 'Contact',
-    title: 'Email, LinkedIn or GitHub',
-    text: 'For a role, write to leonardobarrey@gmail.com. The repositories linked on this page are portfolio versions, with fictional data.',
+    title: 'Email, CV, LinkedIn or GitHub',
+    text: 'For a role, write to leonardobarrey@gmail.com.',
     marquee: ['Open to remote roles', 'Florianópolis', 'UTC−3'],
     actions: [
       { label: 'Email', href: `mailto:${HIRE_LINKS.email}`, primary: true },
+      { label: 'Download CV (PDF)', href: HIRE_LINKS.cv, primary: false },
       { label: 'LinkedIn', href: HIRE_LINKS.linkedin, primary: false },
       { label: 'GitHub', href: HIRE_LINKS.github, primary: false },
     ],

@@ -29,7 +29,9 @@ const { hero } = hire;
             <a
               class:list={['btn', i === 0 ? 'btn--primary' : 'btn--ghost']}
               href={cta.href}
-              {...(cta.href.startsWith('mailto:') ? {} : { target: '_blank', rel: 'noopener noreferrer' })}
+              {...(cta.href.startsWith('mailto:') || cta.href.startsWith('/')
+                ? {}
+                : { target: '_blank', rel: 'noopener noreferrer' })}
               data-magnetic
             >
               {cta.label}

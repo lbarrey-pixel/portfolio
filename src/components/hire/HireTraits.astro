@@ -34,7 +34,7 @@ const { traits } = hire;
 
   .traits__list {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     margin: 0;
     padding: 0;
     list-style: none;
@@ -45,18 +45,18 @@ const { traits } = hire;
     display: grid;
     align-content: start;
     gap: var(--space-3);
-    padding: var(--space-5) var(--space-6) var(--space-6) 0;
+    padding: var(--space-5) var(--space-6) var(--space-6);
     border-bottom: 1px solid var(--line);
-  }
-
-  .traits__list li:nth-child(odd) {
     border-right: 1px solid var(--line);
-    padding-right: var(--space-6);
   }
 
-  .traits__list li:nth-child(even) {
-    padding-left: var(--space-6);
+  .traits__list li:nth-child(3n) {
+    border-right: 0;
     padding-right: 0;
+  }
+
+  .traits__list li:nth-child(3n + 1) {
+    padding-left: 0;
   }
 
   .traits__list h3 {
@@ -66,18 +66,17 @@ const { traits } = hire;
   }
 
   .traits__list p {
-    max-width: 42ch;
     color: var(--mute);
   }
 
-  @media (max-width: 47.99rem) {
+  @media (max-width: 63.99rem) {
     .traits__list {
       grid-template-columns: minmax(0, 1fr);
     }
 
     .traits__list li,
-    .traits__list li:nth-child(odd),
-    .traits__list li:nth-child(even) {
+    .traits__list li:nth-child(3n),
+    .traits__list li:nth-child(3n + 1) {
       padding: var(--space-5) 0;
       border-right: 0;
     }

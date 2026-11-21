@@ -15,7 +15,8 @@ const ALLOWED = (href: string) =>
   href.startsWith('#') ||
   href.startsWith('https://github.com/lbarrey-pixel') ||
   href === 'https://www.linkedin.com/in/leonardobarrey' ||
-  href === 'mailto:leonardobarrey@gmail.com';
+  href === 'mailto:leonardobarrey@gmail.com' ||
+  href === '/Leonardo_Barrey_CV.pdf';
 
 describe('hire content', () => {
   const text = strings(hire);
@@ -46,6 +47,7 @@ describe('hire content', () => {
         'https://github.com/lbarrey-pixel/painel-mei',
         'https://www.linkedin.com/in/leonardobarrey',
         'mailto:leonardobarrey@gmail.com',
+        '/Leonardo_Barrey_CV.pdf',
       ]),
     );
   });
@@ -53,7 +55,7 @@ describe('hire content', () => {
   it('keeps the production counts from the English sales page', () => {
     const values = (id: string) => hire.work.projects.find((p) => p.id === id)!.metrics.map((m) => m.value);
     expect(values('quoting')).toEqual(en.work.projects.find((p) => p.id === 'quoting')!.metrics.map((m) => m.value));
-    expect(values('bakery')).toEqual(en.work.projects.find((p) => p.id === 'bakery')!.metrics.map((m) => m.value));
+    expect(values('bakery')).toEqual([2]);
     expect(values('crm')).toEqual(en.work.projects.find((p) => p.id === 'crm')!.metrics.map((m) => m.value));
     expect(values('warehouse')).toEqual(en.work.projects.find((p) => p.id === 'warehouse')!.metrics.map((m) => m.value));
     expect(values('quoting')).toEqual([224, 65, 4680]);
@@ -88,10 +90,11 @@ describe('hire content', () => {
     expect(traitsText).toMatch(/2013/);
     expect(traitsText).toMatch(/board/i);
     expect(traitsText).toMatch(/day to day/i);
-    expect(traitsText).toMatch(/steady/i);
-    expect(traitsText).toMatch(/from requirements to production/i);
     expect(traitsText).toMatch(/async/i);
+    expect(traitsText).toMatch(/UTC−3/);
     expect(traitsText).toMatch(/new tools/i);
+    expect(traitsText).not.toMatch(/steady/i);
+    expect(traitsText).not.toMatch(/from requirements to production/i);
     expect(traitsText).not.toMatch(/ADS|college|universit|studying|Systems Analysis/i);
     expect(traitsText).not.toMatch(/your business|we deliver|pricing|discovery|whatsapp/i);
   });
@@ -127,6 +130,19 @@ describe('hire content', () => {
     expect(blob).toContain('UTC−3');
     expect(blob).not.toMatch(/mid-level|startup|consultanc/i);
     expect(blob).not.toMatch(/\b(US|Canada|Europe)\b/);
+  });
+
+  it('keeps the fictional-data note in the work intro only', () => {
+    const fict = text.filter((v) => /fictitious|fictional/i.test(v));
+    expect(fict).toEqual([hire.work.lead]);
+  });
+
+  it('lists the roles before Kist and keeps one bakery metric', () => {
+    expect(hire.hero.lead).toMatch(/15\+ years in IT/);
+    expect(hire.experience.roles.map((r) => r.label)).toContain('Before Kist');
+    expect(hire.experience.roles.find((r) => r.label === 'Before Kist')!.detail).toMatch(/AT&IT/);
+    expect(hire.experience.roles.find((r) => r.label === 'Before Kist')!.detail).toMatch(/Poliedro/);
+    expect(hire.work.projects.find((p) => p.id === 'bakery')!.bullets.map((b) => b.text).join(' ')).not.toMatch(/marketplace/i);
   });
 });
 

@@ -23,7 +23,9 @@ const { contact } = hire;
           <a
             class:list={['btn', action.primary ? 'btn--primary' : 'btn--ghost']}
             href={action.href}
-            {...(action.href.startsWith('mailto:') ? {} : { target: '_blank', rel: 'noopener noreferrer' })}
+            {...(action.href.startsWith('mailto:') || action.href.startsWith('/')
+              ? {}
+              : { target: '_blank', rel: 'noopener noreferrer' })}
             data-magnetic
           >
             {action.label}

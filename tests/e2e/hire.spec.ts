@@ -5,7 +5,8 @@ const ALLOWED = (href: string) =>
   href.startsWith('#') ||
   href.startsWith('https://github.com/lbarrey-pixel') ||
   href === 'https://www.linkedin.com/in/leonardobarrey' ||
-  href === 'mailto:leonardobarrey@gmail.com';
+  href === 'mailto:leonardobarrey@gmail.com' ||
+  href === '/Leonardo_Barrey_CV.pdf';
 
 async function hrefs(page: Page) {
   return page.locator('a[href]').evaluateAll((els) => els.map((el) => el.getAttribute('href') ?? ''));
@@ -48,8 +49,13 @@ test('the hire page renders for a recruiter and stays on this page', async ({ pa
       'https://github.com/lbarrey-pixel/painel-mei',
       'https://www.linkedin.com/in/leonardobarrey',
       'mailto:leonardobarrey@gmail.com',
+      '/Leonardo_Barrey_CV.pdf',
     ]),
   );
+  await expect(page.locator('a[href="/Leonardo_Barrey_CV.pdf"]')).toHaveCount(2);
+  await expect(page.locator('#hero')).toContainText('15+ years in IT');
+  await expect(page.locator('#experience')).toContainText('AT&IT');
+  await expect(page.locator('#traits')).not.toContainText('Steady');
 
   await expect(page.locator('#work [data-flow-node]')).toHaveCount(20);
   await expect(page.locator('#method h2')).toHaveText('How I build');
@@ -58,6 +64,8 @@ test('the hire page renders for a recruiter and stays on this page', async ({ pa
   await expect(page.locator('a[href="#method"]')).toHaveCount(0);
   await expect(page.locator('#traits')).toContainText('What it is like to work with me');
   await expect(page.locator('#traits')).toContainText('sit on the board');
+  const disclaimer = ((await page.locator('body').innerText()).match(/fictitious|fictional/gi) ?? []);
+  expect(disclaimer).toHaveLength(2);
   await expect(page.locator('#traits')).not.toContainText(/ADS|college|Systems Analysis/i);
   await expect(page.locator('#experience')).toContainText('Kist Soluções');
   await expect(page.locator('#experience')).toContainText('2013');
