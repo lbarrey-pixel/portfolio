@@ -44,16 +44,16 @@ const hire = {
   meta: {
     title: 'Leonardo Barrey · AI-native full-stack engineer',
     description:
-      'Full-stack engineer in Florianópolis, Brazil (UTC−3), open to remote mid-level roles in the US, Canada and Europe. Selected case studies and working demos.',
+      'Full-stack engineer in Florianópolis, Brazil (UTC−3), open to remote roles. Selected case studies and working demos.',
   },
 
   links: HIRE_LINKS,
 
   hero: {
-    tag: 'Florianópolis, Brazil · UTC−3 · Remote',
+    tag: 'Florianópolis, Brazil · UTC−3 · Open to remote roles',
     headline: 'Leonardo Barrey',
     accent: 'AI-Native Full-Stack Engineer',
-    lead: 'I build operational systems in Python, FastAPI, React, TypeScript and PostgreSQL, and I use AI coding tools with the test suite as the gate. Open to remote mid-level AI Engineer and Full-Stack roles at startups and consultancies in the US, Canada and Europe.',
+    lead: 'I build operational systems in Python, FastAPI, React, TypeScript and PostgreSQL, and I use AI coding tools with the test suite as the gate. Open to remote roles.',
     ctas: [
       { label: 'GitHub', href: HIRE_LINKS.github },
       { label: 'LinkedIn', href: HIRE_LINKS.linkedin },
@@ -221,7 +221,7 @@ const hire = {
     eyebrow: 'Contact',
     title: 'Email, LinkedIn or GitHub',
     text: 'For a role, write to leonardobarrey@gmail.com. The repositories linked on this page are portfolio versions, with fictional data.',
-    marquee: ['Remote roles', 'US · Canada · Europe', 'UTC−3'],
+    marquee: ['Open to remote roles', 'Florianópolis', 'UTC−3'],
     actions: [
       { label: 'Email', href: `mailto:${HIRE_LINKS.email}`, primary: true },
       { label: 'LinkedIn', href: HIRE_LINKS.linkedin, primary: false },

@@ -93,6 +93,15 @@ describe('hire content', () => {
     // Flow-step codes stay. They number the steps of one system, not the list of systems.
     expect(hire.work.projects[0].steps.map((s) => s.code)).toEqual(en.work.projects[0].steps.map((s) => s.code));
   });
+
+  it('does not narrow the role by seniority, company type, or region', () => {
+    const blob = text.join('\n');
+    expect(blob).toMatch(/Open to remote roles/);
+    expect(blob).toMatch(/Florianópolis, Brazil/);
+    expect(blob).toContain('UTC−3');
+    expect(blob).not.toMatch(/mid-level|startup|consultanc/i);
+    expect(blob).not.toMatch(/\b(US|Canada|Europe)\b/);
+  });
 });
 
 describe('sales pages do not point at /hire/', () => {
