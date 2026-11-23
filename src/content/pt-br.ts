@@ -125,7 +125,7 @@ const ptBr: SiteContent = {
         title: 'Do e-mail do cliente à proposta pronta no ERP',
         bullets: [
           { label: 'Entrada', text: 'o cotador arrasta o e-mail, a planilha ou o print do pedido.' },
-          { label: 'IA', text: 'identifica cada item e encontra o produto certo entre 4.680 do catálogo.' },
+          { label: 'IA', text: 'identifica cada item e encontra o produto certo entre cerca de 5.000 do catálogo.' },
           {
             label: 'Preço',
             text: 'um agente pesquisa fornecedor e custo; 65% das sugestões entram sem correção.',
@@ -139,14 +139,14 @@ const ptBr: SiteContent = {
         steps: [
           { code: '01 · ENTRADA', title: 'E-mail do cliente', tech: 'React' },
           { code: '02 · IA', title: 'IA extrai os itens', tech: 'LLMs' },
-          { code: '03 · MATCH', title: 'Match entre 4.680 produtos', tech: 'Busca semântica' },
+          { code: '03 · MATCH', title: 'Match entre cerca de 5.000 produtos', tech: 'Busca semântica' },
           { code: '04 · AGENTE', title: 'Agente pesquisa o custo', tech: 'Agentes' },
           { code: '05 · SAÍDA', title: 'Proposta no ERP', tech: 'ERP' },
         ],
         metrics: [
           { value: 224, label: 'propostas no último mês' },
           { value: 65, suffix: '%', label: 'das sugestões de preço entram sem correção' },
-          { value: 4680, label: 'produtos no catálogo' },
+          { value: 5000, prefix: '~', label: 'produtos no catálogo' },
         ],
         images: [
           {

@@ -63,7 +63,9 @@ test('the hire page renders for a recruiter and stays on this page', async ({ pa
   await expect(page.locator('#method .scenario')).toHaveCount(0);
   await expect(page.locator('a[href="#method"]')).toHaveCount(0);
   await expect(page.locator('#traits')).toContainText('What it is like to work with me');
-  await expect(page.locator('#traits')).toContainText('not involved in day-to-day operations');
+  await expect(page.locator('#traits')).toContainText('Transitioning my client accounts');
+  await expect(page.locator('#experience')).toContainText('Co-founder & Software Engineer');
+  await expect(page.locator('#experience')).toContainText('54 mid-to-large B2B clients');
   await expect(page.locator('#hire, main')).not.toContainText('does not need me');
   const disclaimer = ((await page.locator('body').innerText()).match(/fictitious|fictional/gi) ?? []);
   expect(disclaimer).toHaveLength(2);

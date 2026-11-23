@@ -125,7 +125,7 @@ const en: SiteContent = {
         title: "From a client's email to a finished proposal in the ERP",
         bullets: [
           { label: 'Input', text: 'the quoting team drops in the email, spreadsheet or screenshot of the order.' },
-          { label: 'AI', text: 'identifies each item and finds the right product among 4,680 in the catalog.' },
+          { label: 'AI', text: 'identifies each item and finds the right product among about 5,000 in the catalog.' },
           {
             label: 'Pricing',
             text: 'an agent looks up supplier and cost; 65% of its suggestions go through without correction.',
@@ -139,14 +139,14 @@ const en: SiteContent = {
         steps: [
           { code: '01 · IN', title: 'Client email', tech: 'React' },
           { code: '02 · AI', title: 'AI extracts the items', tech: 'LLMs' },
-          { code: '03 · MATCH', title: 'Match among 4,680 products', tech: 'Semantic search' },
+          { code: '03 · MATCH', title: 'Match among about 5,000 products', tech: 'Semantic search' },
           { code: '04 · AGENT', title: 'Agent finds the cost', tech: 'Agents' },
           { code: '05 · OUT', title: 'Proposal in the ERP', tech: 'ERP' },
         ],
         metrics: [
           { value: 224, label: 'proposals last month' },
           { value: 65, suffix: '%', label: 'of price suggestions accepted without correction' },
-          { value: 4680, label: 'products in the catalog' },
+          { value: 5000, prefix: '~', label: 'products in the catalog' },
         ],
         images: [
           {

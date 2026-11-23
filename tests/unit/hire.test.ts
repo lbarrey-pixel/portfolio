@@ -58,7 +58,7 @@ describe('hire content', () => {
     expect(values('bakery')).toEqual([2]);
     expect(values('crm')).toEqual(en.work.projects.find((p) => p.id === 'crm')!.metrics.map((m) => m.value));
     expect(values('warehouse')).toEqual(en.work.projects.find((p) => p.id === 'warehouse')!.metrics.map((m) => m.value));
-    expect(values('quoting')).toEqual([224, 65, 4680]);
+    expect(values('quoting')).toEqual([224, 65, 5000]);
     expect(values('crm')).toEqual([347, 16]);
   });
 
@@ -88,9 +88,8 @@ describe('hire content', () => {
     expect(traitsText).toMatch(/not engineers/i);
     expect(traitsText).toMatch(/co-founded a B2B/i);
     expect(traitsText).toMatch(/2013/);
-    expect(traitsText).toMatch(/board member/i);
-    expect(traitsText).toMatch(/not involved in day-to-day operations/i);
-    expect(traitsText).not.toMatch(/automated now|does not need me|no longer need/i);
+    expect(traitsText).toMatch(/transitioning my client accounts/i);
+    expect(traitsText).not.toMatch(/board member|not involved|automated now|does not need me|no longer need/i);
     expect(traitsText).toMatch(/async/i);
     expect(traitsText).toMatch(/UTC−3/);
     expect(traitsText).toMatch(/new tools/i);
@@ -140,7 +139,9 @@ describe('hire content', () => {
 
   it('lists the roles before Kist and keeps one bakery metric', () => {
     expect(hire.hero.lead).toMatch(/15\+ years in IT/);
+    expect(hire.experience.roles.map((r) => r.label)).toContain('Co-founder & Software Engineer');
     expect(hire.experience.roles.map((r) => r.label)).toContain('Before Kist');
+    expect(hire.experience.text).toMatch(/54 mid-to-large B2B clients/);
     expect(hire.experience.roles.find((r) => r.label === 'Before Kist')!.detail).toMatch(/AT&IT/);
     expect(hire.experience.roles.find((r) => r.label === 'Before Kist')!.detail).toMatch(/Poliedro/);
     expect(hire.work.projects.find((p) => p.id === 'bakery')!.bullets.map((b) => b.text).join(' ')).not.toMatch(/marketplace/i);
