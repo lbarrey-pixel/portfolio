@@ -70,7 +70,7 @@ describe('content', () => {
       it('carries the source metrics', () => {
         const values = (id: string) =>
           c.work.projects.find((p) => p.id === id)!.metrics.map((m) => m.value);
-        expect(values('quoting')).toEqual(expect.arrayContaining([224, 65, 4680]));
+        expect(values('quoting')).toEqual(expect.arrayContaining([224, 65, 5000]));
         expect(values('bakery')).toEqual(expect.arrayContaining([60]));
         expect(values('crm')).toEqual(expect.arrayContaining([347, 16]));
       });

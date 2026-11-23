@@ -50,10 +50,10 @@ test.describe('motion', () => {
       }
       // Count-up numbers already show their final value, and stay there.
       const metrics = page.locator('[data-project-panel="quoting"] [data-count]');
-      await expect(metrics).toHaveText(['224', '65%', '4,680']);
+      await expect(metrics).toHaveText(['224', '65%', '~5,000']);
       await page.locator('[data-project-panel="quoting"]').scrollIntoViewIfNeeded();
       await page.waitForTimeout(400);
-      await expect(metrics).toHaveText(['224', '65%', '4,680']);
+      await expect(metrics).toHaveText(['224', '65%', '~5,000']);
       // Headlines are not split into animated words.
       await expect(page.locator('[data-reveal-lines] span')).toHaveCount(0);
     });
@@ -86,7 +86,7 @@ test.describe('motion', () => {
   test('metrics count up to their final value', async ({ page }) => {
     await page.goto('/pt-br/');
     await page.locator('[data-project-panel="quoting"]').scrollIntoViewIfNeeded();
-    await expect(page.locator('[data-project-panel="quoting"] [data-count]')).toHaveText(['224', '65%', '4.680']);
+    await expect(page.locator('[data-project-panel="quoting"] [data-count]')).toHaveText(['224', '65%', '~5.000']);
   });
 
   test('a card leans toward the pointer and settles when it leaves', async ({ page }) => {

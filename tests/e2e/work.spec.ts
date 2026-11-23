@@ -3,7 +3,7 @@ import { getContent } from '../../src/content';
 import type { Locale } from '../../src/i18n/locales';
 
 const LOCALES: Locale[] = ['en', 'pt-br'];
-const CATALOG = { en: '4,680', 'pt-br': '4.680' } as const;
+const CATALOG = { en: '~5,000', 'pt-br': '~5.000' } as const;
 
 const panel = (page: Page, id: string) => page.locator(`#work [data-project-panel="${id}"]`);
 

@@ -82,7 +82,7 @@ const hire = {
       project('quoting', {
         title: 'From a quote email to an ERP import file',
         summary:
-          'The request comes in as email, a spreadsheet, a PDF or a screenshot. The desk extracts the lines, matches the catalog and writes the CSV the ERP imports. The operator confirms every line.',
+          'The request comes in as email, a spreadsheet, a PDF or a screenshot. The desk extracts the lines, matches the catalog of about 5,000 products and writes the CSV the ERP imports. The operator confirms every line.',
         bullets: [
           {
             label: 'Problem',
@@ -154,7 +154,7 @@ const hire = {
           },
           {
             label: 'Built',
-            text: 'Scan the DANFE, fetch the XML from SEFAZ, confirm the match, consolidate, measure the packages, check the ERP invoice against that measurement, scan the DACTE, then compare the quoted freight with the CT-e. Two roles: the seller and the warehouse. The warehouse sees an order only after consolidation is opened.',
+            text: 'Scan the DANFE, fetch the XML from SEFAZ, confirm the match, consolidate, measure the packages, check the ERP invoice against that measurement, scan the DACTE, then compare the quoted freight with the CT-e. Two roles: the seller and the warehouse. The warehouse sees an order only after consolidation is opened, allowing physical checking to move to a third-party company while control stayed with Kist through its own code.',
           },
           {
             label: 'Stack',
@@ -216,7 +216,7 @@ const hire = {
       },
       {
         title: 'Owner',
-        text: 'I co-founded a B2B technology company in 2013 and ran it. Today I am a co-founder and board member, not involved in day-to-day operations.',
+        text: 'I co-founded a B2B technology company in 2013 and continue developing its systems and handling commercial client accounts. Transitioning my client accounts to my partners to move into a full-time engineering role.',
       },
       {
         title: 'On my own',
@@ -229,10 +229,9 @@ const hire = {
     eyebrow: 'Experience',
     title: 'Kist Soluções',
     photoAlt: en.about.photoAlt,
-    text: 'Co-founder since 2013, and lead software engineer since 2023. Before 2023 the work was IT products and small Python automations on Arduino and Raspberry Pi for local ISPs.',
+    text: 'Co-founder & Software Engineer since 2013, building and maintaining the production systems the business runs on. The company serves 54 mid-to-large B2B clients across logistics, energy and wholesale, including listed companies and public-sector bodies, with about 40 orders a month. Transitioning my client accounts to my partners to move into a full-time engineering role.',
     roles: [
-      { label: 'Co-founder', detail: 'Kist Soluções · 2013 – Present' },
-      { label: 'Lead software engineer', detail: 'Kist Soluções · 2023 – Present' },
+      { label: 'Co-founder & Software Engineer', detail: 'Kist Soluções · 2013 – Present' },
       { label: 'Before 2023', detail: 'IT products and small Python automations on Arduino and Raspberry Pi for local ISPs' },
       {
         label: 'Before Kist',
